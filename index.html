@@ -124,7 +124,7 @@
             
             <div id="login-container">
                 <h3 class="text-xl font-bold text-slate-800 mb-2">Acceso Administrador</h3>
-                <p class="text-xs text-slate-500 mb-4">Ingresa la clave para gestionar el inventario, entradas, salidas, categorías y proveedores.</p>
+                <p class="text-xs text-slate-500 mb-4">Ingresa la clave para gestionar inventario, editar, exportar a Excel y más.</p>
                 <input type="password" id="admin-pass" placeholder="Clave de acceso" class="w-full border rounded-lg px-4 py-2 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-verdeOscuro">
                 <button onclick="verificarAdmin()" class="w-full bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition">Ingresar</button>
             </div>
@@ -148,25 +148,34 @@
                 <!-- SECCIÓN 1: PRODUCTOS Y STOCK -->
                 <div id="tab-productos" class="space-y-4">
                     <div class="bg-slate-50 p-4 rounded-xl border space-y-2">
-                        <h4 class="font-bold text-slate-700 text-sm">Registrar Nuevo Producto / Stock Inicial</h4>
+                        <h4 class="font-bold text-slate-700 text-sm" id="titulo-form-producto">Registrar Nuevo Producto / Stock Inicial</h4>
+                        <input type="hidden" id="edit-prod-id" value="">
+                        
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                             <input type="text" id="nuevo-nombre" placeholder="Nombre (Ej. Vaso Foam 8oz)" class="border rounded-lg px-3 py-2 text-sm">
                             <input type="number" step="0.01" id="nuevo-precio" placeholder="Precio unitario (Ej. 12.50)" class="border rounded-lg px-3 py-2 text-sm">
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            <select id="nuevo-categoria" class="border rounded-lg px-3 py-2 text-sm bg-white">
-                                <!-- Las categorías se cargan dinámicamente -->
-                            </select>
+                            <select id="nuevo-categoria" class="border rounded-lg px-3 py-2 text-sm bg-white"></select>
                             <input type="number" id="nuevo-stock" placeholder="Stock inicial (Ej. 100)" class="border rounded-lg px-3 py-2 text-sm">
                         </div>
                         <input type="text" id="nuevo-imagen" placeholder="URL de imagen (opcional)" class="w-full border rounded-lg px-3 py-2 text-sm">
-                        <button id="btn-guardar-prod" onclick="guardarNuevoProducto()" class="w-full bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition text-sm">Guardar en Inventario</button>
+                        
+                        <div class="flex gap-2">
+                            <button id="btn-guardar-prod" onclick="guardarNuevoProducto()" class="flex-1 bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition text-sm">Guardar en Inventario</button>
+                            <button id="btn-cancelar-edit" onclick="cancelarEdicion()" class="hidden bg-gray-400 text-white px-4 py-2 rounded-lg font-bold hover:bg-gray-500 transition text-sm">Cancelar</button>
+                        </div>
                     </div>
                     
                     <div class="bg-white p-3 rounded-xl border space-y-2">
                         <div class="flex justify-between items-center border-b pb-2">
-                            <h4 class="font-bold text-slate-700 text-xs">Inventario Actual en Firebase:</h4>
-                            <span id="total-inversion-global" class="text-xs bg-green-100 text-green-800 font-bold px-2 py-1 rounded">Inversión Total: $0.00</span>
+                            <div>
+                                <h4 class="font-bold text-slate-700 text-xs">Inventario Actual en Firebase:</h4>
+                                <span id="total-inversion-global" class="text-xs bg-green-100 text-green-800 font-bold px-2 py-1 rounded">Inversión Total: $0.00</span>
+                            </div>
+                            <button onclick="exportarExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow">
+                                <i class="fa-solid fa-file-excel"></i> Exportar a Excel
+                            </button>
                         </div>
                         <div id="lista-stock-admin" class="space-y-1 text-xs max-h-48 overflow-y-auto">
                             <p class="text-slate-400 text-center py-4">Cargando inventario...</p>
@@ -177,9 +186,14 @@
                 <!-- SECCIÓN 2: CATEGORÍAS -->
                 <div id="tab-categorias" class="hidden space-y-4">
                     <div class="bg-slate-50 p-4 rounded-xl border space-y-3">
-                        <h4 class="font-bold text-slate-700 text-sm">Agregar Nueva Categoría</h4>
+                        <h4 class="font-bold text-slate-700 text-sm" id="titulo-form-cat">Agregar Nueva Categoría</h4>
+                        <input type="hidden" id="edit-cat-id" value="">
                         <input type="text" id="nueva-categoria-input" placeholder="Nombre de la categoría (Ej. Bolsas Plásticas)" class="w-full border rounded-lg px-3 py-2 text-sm">
-                        <button onclick="guardarCategoria()" class="w-full bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition text-sm">Guardar Categoría</button>
+                        
+                        <div class="flex gap-2">
+                            <button id="btn-guardar-cat" onclick="guardarCategoria()" class="flex-1 bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition text-sm">Guardar Categoría</button>
+                            <button id="btn-cancelar-cat" onclick="cancelarEdicionCat()" class="hidden bg-gray-400 text-white px-4 py-2 rounded-lg font-bold hover:bg-gray-500 transition text-sm">Cancelar</button>
+                        </div>
                     </div>
                     <div class="bg-white p-3 rounded-xl border space-y-2">
                         <h4 class="font-bold text-slate-700 text-xs mb-2">Categorías Registradas:</h4>
@@ -272,7 +286,6 @@
                 if(selectNuevoProd) selectNuevoProd.innerHTML = '';
                 if(listaCategoriasAdmin) listaCategoriasAdmin.innerHTML = '';
 
-                // Categorías por defecto si Firebase está vacío
                 const categoriasBase = querySnapshot.empty ? ["Vasos de Foam", "Bandejas y Aluminio", "Servilletas"] : [];
 
                 if (querySnapshot.empty) {
@@ -287,7 +300,6 @@
                     });
                 }
 
-                // Poblar select y lista admin
                 categoriasGlobales.forEach(cat => {
                     if(selectNuevoProd) {
                         selectNuevoProd.innerHTML += `<option value="${cat.nombre}">${cat.nombre}</option>`;
@@ -296,7 +308,10 @@
                         listaCategoriasAdmin.innerHTML += `
                             <div class="flex justify-between items-center border-b py-1">
                                 <span><b>${cat.nombre}</b></span>
-                                <button onclick="eliminarCategoria('${cat.id}')" class="bg-red-500 hover:bg-red-600 text-white px-2 py-0.5 rounded text-[10px] font-bold">Eliminar</button>
+                                <div class="flex gap-1">
+                                    <button onclick="prepararEdicionCat('${cat.id}', '${cat.nombre}')" class="bg-amber-500 hover:bg-amber-600 text-white px-2 py-0.5 rounded text-[10px] font-bold"><i class="fa-solid fa-pen"></i></button>
+                                    <button onclick="eliminarCategoria('${cat.id}')" class="bg-red-500 hover:bg-red-600 text-white px-2 py-0.5 rounded text-[10px] font-bold"><i class="fa-solid fa-trash"></i></button>
+                                </div>
                             </div>`;
                     }
                 });
@@ -348,7 +363,10 @@
                                     <div class="text-right">
                                         <div class="text-[10px] text-green-700 font-bold">Inv: $${subtotalItem.toFixed(2)}</div>
                                     </div>
-                                    <button onclick="eliminarProducto('${docSnap.id}', '${data.nombre}')" class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-[10px] font-bold">
+                                    <button onclick="prepararEdicionProd('${docSnap.id}', '${data.nombre}', '${data.precio}', '${data.categoria}', '${data.stock}', '${data.imagen || ''}')" class="bg-amber-500 hover:bg-amber-600 text-white px-2 py-1 rounded text-[10px] font-bold" title="Editar">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </button>
+                                    <button onclick="eliminarProducto('${docSnap.id}', '${data.nombre}')" class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-[10px] font-bold" title="Eliminar">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </div>
@@ -365,6 +383,40 @@
             } catch (e) {
                 console.error("Error al cargar productos", e);
             }
+        }
+
+        // EXPORTAR A EXCEL (CSV Formateado profesional)
+        window.exportarExcel = function() {
+            if(productosGlobales.length === 0) {
+                alert('⚠️ No hay productos en el inventario para exportar.');
+                return;
+            }
+
+            let csvContent = "\uFEFF"; // BOM para correcta codificación de tildes en Excel
+            csvContent += "Producto,Categoría,Precio Unitario ($),Stock Actual,Inversión Total ($)\n";
+
+            let inversionTotal = 0;
+            productosGlobales.forEach(p => {
+                const precio = parseFloat(p.precio) || 0;
+                const stock = parseInt(p.stock) || 0;
+                const subtotal = precio * stock;
+                inversionTotal += subtotal;
+
+                const nombreLimpio = `"${(p.nombre || '').replace(/"/g, '""')}"`;
+                const catLimpias = `"${(p.categoria || '').replace(/"/g, '""')}"`;
+                csvContent += `${nombreLimpio},${catLimpias},${precio.toFixed(2)},${stock},${subtotal.toFixed(2)}\n`;
+            });
+
+            csvContent += `\n,,,,,TOTAL INVERSIÓN:,$${inversionTotal.toFixed(2)}`;
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `Inventario_DesechablesBásicos_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         // Chat DB Bot
@@ -404,7 +456,6 @@
             }, 600);
         }
 
-        // Navegación Panel Admin
         window.cambiarTabAdmin = function(tab) {
             ['productos', 'categorias', 'movimientos', 'proveedores', 'agente'].forEach(t => {
                 document.getElementById(`tab-${t}`).classList.add('hidden');
@@ -425,25 +476,43 @@
             } else { alert('Clave incorrecta'); }
         }
 
-        // GUARDAR NUEVA CATEGORÍA
+        // GUARDAR O EDITAR CATEGORÍA
         window.guardarCategoria = async function() {
+            const catId = document.getElementById('edit-cat-id').value;
             const catInput = document.getElementById('nueva-categoria-input').value.trim();
             if(!catInput) return alert('⚠️ Escribe el nombre de la categoría.');
 
-            const yaExiste = categoriasGlobales.some(c => c.nombre.toLowerCase() === catInput.toLowerCase());
-            if(yaExiste) return alert('⚠️ Esta categoría ya existe.');
-
             try {
-                await addDoc(collection(db, "categorias"), { nombre: catInput });
-                alert(`✅ Categoría "${catInput}" guardada con éxito.`);
-                document.getElementById('nueva-categoria-input').value = '';
+                if(catId) {
+                    await updateDoc(doc(db, "categorias", catId), { nombre: catInput });
+                    alert(`✅ Categoría actualizada con éxito.`);
+                } else {
+                    await addDoc(collection(db, "categorias"), { nombre: catInput });
+                    alert(`✅ Categoría "${catInput}" guardada con éxito.`);
+                }
+                cancelarEdicionCat();
                 cargarCategorias();
             } catch(e) {
                 alert('❌ Error al guardar la categoría.');
             }
         }
 
-        // ELIMINAR CATEGORÍA
+        window.prepararEdicionCat = function(id, nombre) {
+            document.getElementById('edit-cat-id').value = id;
+            document.getElementById('nueva-categoria-input').value = nombre;
+            document.getElementById('titulo-form-cat').innerText = "✏️ Editar Categoría";
+            document.getElementById('btn-guardar-cat').innerText = "Actualizar Categoría";
+            document.getElementById('btn-cancelar-cat').classList.remove('hidden');
+        }
+
+        window.cancelarEdicionCat = function() {
+            document.getElementById('edit-cat-id').value = '';
+            document.getElementById('nueva-categoria-input').value = '';
+            document.getElementById('titulo-form-cat').innerText = "Agregar Nueva Categoría";
+            document.getElementById('btn-guardar-cat').innerText = "Guardar Categoría";
+            document.getElementById('btn-cancelar-cat').classList.add('hidden');
+        }
+
         window.eliminarCategoria = async function(id) {
             if(!confirm('¿Estás seguro de eliminar esta categoría?')) return;
             try {
@@ -455,8 +524,9 @@
             }
         }
 
-        // GUARDAR NUEVO PRODUCTO
+        // GUARDAR O EDITAR PRODUCTO
         window.guardarNuevoProducto = async function() {
+            const prodId = document.getElementById('edit-prod-id').value;
             const nombreInput = document.getElementById('nuevo-nombre').value.trim();
             const precioVal = document.getElementById('nuevo-precio').value.trim();
             const categoria = document.getElementById('nuevo-categoria').value;
@@ -471,12 +541,13 @@
             const precio = parseFloat(precioVal);
             const stock = parseInt(stockVal) || 0;
 
-            const nombreLimpio = nombreInput.toLowerCase();
-            const yaExiste = productosGlobales.some(p => p.nombre && p.nombre.toLowerCase() === nombreLimpio);
-
-            if (yaExiste) {
-                alert(`⚠️ ¡Producto Duplicado!\n\nEl producto "${nombreInput}" ya se encuentra registrado en el inventario.`);
-                return;
+            if(!prodId) {
+                const nombreLimpio = nombreInput.toLowerCase();
+                const yaExiste = productosGlobales.some(p => p.nombre && p.nombre.toLowerCase() === nombreLimpio);
+                if (yaExiste) {
+                    alert(`⚠️ ¡Producto Duplicado!\n\nEl producto "${nombreInput}" ya se encuentra registrado.`);
+                    return;
+                }
             }
 
             const btnGuardar = document.getElementById('btn-guardar-prod');
@@ -484,40 +555,51 @@
             btnGuardar.disabled = true;
 
             try {
-                await addDoc(collection(db, "productos"), { 
-                    nombre: nombreInput, 
-                    precio, 
-                    categoria, 
-                    stock, 
-                    imagen, 
-                    fecha: new Date() 
-                });
+                if(prodId) {
+                    await updateDoc(doc(db, "productos", prodId), { nombre: nombreInput, precio, categoria, stock, imagen });
+                    alert(`✅ Producto "${nombreInput}" actualizado con éxito.`);
+                } else {
+                    await addDoc(collection(db, "productos"), { nombre: nombreInput, precio, categoria, stock, imagen, fecha: new Date() });
+                    alert(`✅ Producto "${nombreInput}" guardado con éxito.`);
+                }
 
-                const inversionTotalLote = precio * stock;
-
-                alert(`✅ ¡Producto Guardado con Éxito!\n\n` +
-                      `- Producto: ${nombreInput}\n` +
-                      `- Categoría: ${categoria}\n` +
-                      `- Precio Unitario: $${precio.toFixed(2)}\n` +
-                      `- Stock Inicial: ${stock} unidades\n` +
-                      `- Inversión en este lote: $${inversionTotalLote.toFixed(2)}`);
-                
-                document.getElementById('nuevo-nombre').value = '';
-                document.getElementById('nuevo-precio').value = '';
-                document.getElementById('nuevo-stock').value = '';
-                document.getElementById('nuevo-imagen').value = '';
-                
+                cancelarEdicion();
                 await cargarCatalogoAdmin();
             } catch(e) {
                 console.error("Error al guardar:", e);
-                alert('❌ Error al guardar el producto en la base de datos.');
+                alert('❌ Error al guardar en Firebase.');
             } finally {
                 btnGuardar.innerText = 'Guardar en Inventario';
                 btnGuardar.disabled = false;
             }
         }
 
-        // ELIMINAR PRODUCTO
+        window.prepararEdicionProd = function(id, nombre, precio, categoria, stock, imagen) {
+            document.getElementById('edit-prod-id').value = id;
+            document.getElementById('nuevo-nombre').value = nombre;
+            document.getElementById('nuevo-precio').value = precio;
+            document.getElementById('nuevo-categoria').value = categoria;
+            document.getElementById('nuevo-stock').value = stock;
+            document.getElementById('nuevo-imagen').value = imagen;
+
+            document.getElementById('titulo-form-producto').innerText = "✏️ Editar Producto";
+            document.getElementById('btn-guardar-prod').innerText = "Actualizar Producto";
+            document.getElementById('btn-cancelar-edit').classList.remove('hidden');
+            cambiarTabAdmin('productos');
+        }
+
+        window.cancelarEdicion = function() {
+            document.getElementById('edit-prod-id').value = '';
+            document.getElementById('nuevo-nombre').value = '';
+            document.getElementById('nuevo-precio').value = '';
+            document.getElementById('nuevo-stock').value = '';
+            document.getElementById('nuevo-imagen').value = '';
+
+            document.getElementById('titulo-form-producto').innerText = "Registrar Nuevo Producto / Stock Inicial";
+            document.getElementById('btn-guardar-prod').innerText = "Guardar en Inventario";
+            document.getElementById('btn-cancelar-edit').classList.add('hidden');
+        }
+
         window.eliminarProducto = async function(id, nombre) {
             if(!confirm(`¿Estás seguro de eliminar el producto "${nombre}" del inventario?`)) return;
             try {
