@@ -3,74 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desechables Básicos | Próximamente</title>
+    <title>Panel Oculto • Desechables Básicos</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-            color: #ffffff;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 40px;
-            border-radius: 16px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .badge {
-            background-color: #f59e0b;
-            color: #0f172a;
-            padding: 6px 16px;
-            font-size: 14px;
-            font-weight: bold;
-            border-radius: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-            color: #f8fafc;
-        }
-        p {
-            font-size: 1.1rem;
-            color: #94a3b8;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
-        .footer-text {
-            font-size: 0.9rem;
-            color: #64748b;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 20px;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #f8fafc; padding: 20px; }
+        .login-box, .admin-panel { max-width: 800px; margin: 40px auto; background: #1e293b; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
+        h1, h2 { margin-bottom: 20px; color: #f59e0b; }
+        input, textarea, button { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #475569; background: #0f172a; color: #fff; font-size: 1rem; }
+        button { background: #f59e0b; color: #0f172a; font-weight: bold; cursor: pointer; border: none; transition: 0.2s; }
+        button:hover { background: #d97706; }
+        .hidden { display: none; }
+        .card { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .chat-container { height: 250px; background: #0f172a; border: 1px solid #475569; border-radius: 8px; padding: 15px; overflow-y: auto; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="badge">Próximamente</div>
-        <h1>Algo increíble se está gestando</h1>
-        <p>Estamos construyendo una nueva experiencia digital para facilitarte tus compras en <strong>Desechables Básicos</strong>. Pronto abriremos las puertas de nuestra nueva plataforma con todos los productos listos para ti en Santa Ana Norte.</p>
-        <div class="footer-text">
-            © Desechables Básicos • Todos los derechos reservados.
-        </div>
+    <!-- PASO 1: BLOQUEO DE SEGURIDAD (PASSWORD) -->
+    <div id="login-section" class="login-box">
+        <h1>🔒 Acceso Reservado</h1>
+        <p style="color: #94a3b8; margin-bottom: 20px;">Introduce tu clave de administrador para gestionar productos y el Agente IA.</p>
+        <input type="password" id="admin-pass" placeholder="Contraseña de Administrador">
+        <button onclick="verificarAcceso()">Ingresar al Panel</button>
     </div>
+
+    <!-- PASO 2: PANEL DE ADMINISTRACIÓN OCULTO -->
+    <div id="panel-section" class="admin-panel hidden">
+        <h1>⚙️ Panel de Control • Desechables Básicos</h1>
+        <p style="color: #94a3b8; margin-bottom: 25px;">Zona privada para gestión de inventario y pruebas del Agente IA en Santa Ana Norte.</p>
+
+        <!-- Sección de Carga de Productos -->
+        <div class="card">
+            <h2>📦 Agregar Nuevo Producto</h2>
+            <input type="text" id="prod-nombre" placeholder="Nombre del producto (Ej. Plato desc. #8)">
+            <input type="number" id="prod-precio" placeholder="Precio ($)">
+            <input type="number" id="prod-stock" placeholder="Cantidad inicial en inventario">
+            <button onclick="guardarProducto()">Guardar en la Base de Datos</button>
+            <p id="status-prod" style="font-size: 0.9rem; color: #10b981;"></p>
+        </div>
+
+        <!-- Sección de Pruebas del Agente IA -->
+        <div class="card">
+            <h2>🤖 Consola de Pruebas del Agente IA</h2>
+            <div id="chat-box" class="chat-container">
+                <div style="color: #94a3b8;">[IA]: Hola Josue. El agente está listo para asistirte con el inventario y las consultas de Desechables Básicos.</div>
+            </div>
+            <input type="text" id="ai-input" placeholder="Escribe algo para probar al Agente IA...">
+            <button onclick="probarIA()">Enviar al Agente</button>
+        </div>
+        
+        <button onclick="cerrarSesion()" style="background: #ef4444; color: #fff; margin-top: 20px;">Cerrar Sesión Segura</button>
+    </div>
+
+    <script>
+        // Define tu contraseña secreta aquí (cámbiala por la que prefieras)
+        const CLAVE_SECRETA = "admin1234";
+
+        function verificarAcceso() {
+            const ingresada = document.getElementById('admin-pass').value;
+            if (ingresada === CLAVE_SECRETA) {
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('panel-section').classList.remove('hidden');
+            } else {
+                alert("Contraseña incorrecta. Acceso denegado.");
+            }
+        }
+
+        function guardarProducto() {
+            const nombre = document.getElementById('prod-nombre').value;
+            const precio = document.getElementById('prod-precio').value;
+            const stock = document.getElementById('prod-stock').value;
+
+            if(!nombre || !precio) {
+                alert("Por favor completa al menos el nombre y el precio.");
+                return;
+            }
+
+            // Aquí puedes conectar directamente con tu Firebase Firestore para guardar el producto
+            document.getElementById('status-prod').innerText = `¡Éxito! Producto "${nombre}" registrado correctamente para la tienda.`;
+            
+            // Limpiar campos
+            document.getElementById('prod-nombre').value = '';
+            document.getElementById('prod-precio').value = '';
+            document.getElementById('prod-stock').value = '';
+        }
+
+        function probarIA() {
+            const input = document.getElementById('ai-input');
+            const chatBox = document.getElementById('chat-box');
+            if(!input.value) return;
+
+            // Mostrar mensaje del usuario
+            chatBox.innerHTML += `<div style="margin-bottom: 8px; color: #38bdf8;"><b>Tú:</b> ${input.value}</div>`;
+            
+            const textoPregunta = input.value;
+            input.value = '';
+
+            // Simulación de respuesta del Agente IA integrada
+            setTimeout(() => {
+                chatBox.innerHTML += `<div style="margin-bottom: 8px; color: #f59e0b;"><b>Agente IA:</b> Entendido. Procesando instrucción para Desechables Básicos: "${textoPregunta}". Todo en orden en Santa Ana Norte.</div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 500);
+        }
+
+        function cerrarSesion() {
+            document.getElementById('panel-section').classList.add('hidden');
+            document.getElementById('login-section').classList.remove('hidden');
+            document.getElementById('admin-pass').value = '';
+        }
+    </script>
 
 </body>
 </html>
