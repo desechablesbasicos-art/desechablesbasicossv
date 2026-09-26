@@ -323,25 +323,50 @@
             } else { alert('Clave incorrecta'); }
         }
 
-        // Guardar Nuevo Producto
+        // Guardar Nuevo Producto con Validación de Duplicados y Mensaje de Éxito
         window.guardarNuevoProducto = async function() {
-            const nombre = document.getElementById('nuevo-nombre').value;
-            const precio = document.getElementById('nuevo-precio').value;
+            const nombreInput = document.getElementById('nuevo-nombre').value.trim();
+            const precio = document.getElementById('nuevo-precio').value.trim();
             const categoria = document.getElementById('nuevo-categoria').value;
             const stock = parseInt(document.getElementById('nuevo-stock').value) || 0;
-            const imagen = document.getElementById('nuevo-imagen').value;
+            const imagen = document.getElementById('nuevo-imagen').value.trim();
 
-            if(!nombre || !precio) return alert('Completa al menos el nombre y el precio.');
+            if(!nombreInput || !precio) {
+                return alert('⚠️ Por favor completa al menos el nombre y el precio.');
+            }
+
+            // Verificar si ya existe un producto con el mismo nombre (Ignorando mayúsculas/minúsculas)
+            const nombreLimpio = nombreInput.toLowerCase();
+            const yaExiste = productosGlobales.some(p => p.nombre && p.nombre.toLowerCase() === nombreLimpio);
+
+            if (yaExiste) {
+                return alert(`⚠️ ¡Duplicado detectado!\n\nEl producto "${nombreInput}" ya se encuentra registrado en el inventario.`);
+            }
 
             try {
-                await addDoc(collection(db, "productos"), { nombre, precio, categoria, stock, imagen, fecha: new Date() });
-                alert('¡Producto y stock guardados con éxito!');
+                await addDoc(collection(db, "productos"), { 
+                    nombre: nombreInput, 
+                    precio, 
+                    categoria, 
+                    stock, 
+                    imagen, 
+                    fecha: new Date() 
+                });
+
+                alert(`✅ ¡Guardado con éxito!\n\nEl producto "${nombreInput}" se ha registrado correctamente en el inventario.`);
+                
+                // Limpiar campos del formulario
                 document.getElementById('nuevo-nombre').value = '';
                 document.getElementById('nuevo-precio').value = '';
                 document.getElementById('nuevo-stock').value = '';
                 document.getElementById('nuevo-imagen').value = '';
+                
+                // Recargar lista y selectores
                 cargarCatalogoAdmin();
-            } catch(e) { alert('Error al guardar en Firebase'); }
+            } catch(e) {
+                console.error(e);
+                alert('❌ Error al guardar el producto en la base de datos.');
+            }
         }
 
         // Registrar Entradas y Salidas
