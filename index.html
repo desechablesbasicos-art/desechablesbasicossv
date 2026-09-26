@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desechables Básicos - Catálogo & Inventario</title>
+    <title>Desechables Básicos - Catálogo & Promociones</title>
     
     <!-- ETIQUETAS OPEN GRAPH PARA MINIATURA EN WHATSAPP Y REDES -->
     <meta property="og:title" content="Desechables Básicos | Catálogo Oficial">
@@ -51,10 +51,10 @@
         </div>
     </header>
 
-    <!-- CONTENEDOR PRINCIPAL: CAMBIA ENTRE EXPECTATIVA Y VISTA COMPLETA -->
-    <main class="container mx-auto px-4 py-8 flex-1">
+    <!-- CONTENEDOR PRINCIPAL -->
+    <main class="container mx-auto px-4 py-6 flex-1 space-y-6">
 
-        <!-- 1. VISTA DE EXPECTATIVA (Se oculta si el admin desactiva el modo expectativa) -->
+        <!-- 1. VISTA DE EXPECTATIVA -->
         <div id="vista-expectativa" class="hidden flex items-center justify-center py-12">
             <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-2xl w-full p-8 text-center space-y-6">
                 <div class="w-20 h-20 bg-verdeOscuro text-amarilloLogo rounded-full flex items-center justify-center mx-auto text-3xl shadow-lg animate-bounce">
@@ -76,9 +76,31 @@
             </div>
         </div>
 
-        <!-- 2. VISTA DE LA PÁGINA TERMINADA Y CATÁLOGO (Visible por defecto) -->
+        <!-- 2. VISTA DE LA PÁGINA TERMINADA -->
         <div id="vista-terminada" class="space-y-6">
-            <!-- Banner de bienvenida / Buscador -->
+            
+            <!-- CARRUSEL DE BANNERS PROMOCIONALES (ESTILO SUPER SELECTOS) -->
+            <div class="relative w-full rounded-2xl overflow-hidden shadow-xl bg-verdeOscuro group">
+                <!-- Contenedor de diapositivas -->
+                <div id="carrusel-slides-container" class="relative h-56 sm:h-72 md:h-96 w-full flex transition-transform duration-500 ease-out">
+                    <!-- Banners se cargan dinámicamente desde Firebase o respaldo -->
+                </div>
+
+                <!-- Botones de Navegación Lateral (Flechas) -->
+                <button onclick="moverSlide(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white w-10 h-10 rounded-full flex items-center justify-center text-lg transition shadow-md backdrop-blur-sm">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button onclick="moverSlide(1)" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white w-10 h-10 rounded-full flex items-center justify-center text-lg transition shadow-md backdrop-blur-sm">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+
+                <!-- Indicadores de Puntos (Dots abajo) -->
+                <div id="carrusel-dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                    <!-- Generados dinámicamente -->
+                </div>
+            </div>
+
+            <!-- Buscador y Título del Catálogo -->
             <div class="bg-gradient-to-r from-verdeOscuro to-verdeMedio rounded-2xl p-6 text-white shadow-lg flex flex-col md:flex-row justify-between items-center gap-4">
                 <div>
                     <h2 class="text-2xl font-extrabold text-amarilloLogo">Catálogo de Productos</h2>
@@ -156,7 +178,7 @@
             
             <div id="login-container">
                 <h3 class="text-xl font-bold text-slate-800 mb-2">Acceso Administrador</h3>
-                <p class="text-xs text-slate-500 mb-4">Ingresa la clave para gestionar inventario, modo de página e inventario.</p>
+                <p class="text-xs text-slate-500 mb-4">Ingresa la clave para gestionar inventario, banners y configuración.</p>
                 <input type="password" id="admin-pass" placeholder="Clave de acceso" class="w-full border rounded-lg px-4 py-2 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-verdeOscuro">
                 <button onclick="verificarAdmin()" class="w-full bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition">Ingresar</button>
             </div>
@@ -164,11 +186,11 @@
             <!-- Panel de Administración e Inventario -->
             <div id="dashboard-container" class="hidden space-y-6">
                 <h3 class="text-xl font-bold text-slate-800 border-b pb-2 flex items-center justify-between">
-                    <span>Panel de Control & Inventario</span>
+                    <span>Panel de Control & Promociones</span>
                     <span class="text-xs bg-amarilloLogo text-verdeOscuro px-2 py-1 rounded font-bold">Admin Activo</span>
                 </h3>
 
-                <!-- CONTROL MAESTRO DE MODO PÁGINA (EXPECTATIVA VS TERMINADA) -->
+                <!-- CONTROL MAESTRO DE MODO PÁGINA -->
                 <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl flex items-center justify-between">
                     <div>
                         <h4 class="font-bold text-amber-900 text-xs">Estado de la Página Pública:</h4>
@@ -182,10 +204,10 @@
                 <!-- Pestañas del Panel -->
                 <div class="flex gap-2 border-b pb-2 overflow-x-auto">
                     <button onclick="cambiarTabAdmin('productos')" id="tab-btn-productos" class="bg-verdeOscuro text-amarilloLogo px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap">Productos & Stock</button>
+                    <button onclick="cambiarTabAdmin('banners')" id="tab-btn-banners" class="bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap">Banners Carrusel</button>
                     <button onclick="cambiarTabAdmin('categorias')" id="tab-btn-categorias" class="bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap">Categorías</button>
                     <button onclick="cambiarTabAdmin('movimientos')" id="tab-btn-movimientos" class="bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap">Entradas / Salidas</button>
                     <button onclick="cambiarTabAdmin('proveedores')" id="tab-btn-proveedores" class="bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap">Proveedores</button>
-                    <button onclick="cambiarTabAdmin('agente')" id="tab-btn-agente" class="bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap">Agente Meta</button>
                 </div>
                 
                 <!-- SECCIÓN 1: PRODUCTOS Y STOCK -->
@@ -226,7 +248,22 @@
                     </div>
                 </div>
 
-                <!-- SECCIÓN 2: CATEGORÍAS -->
+                <!-- SECCIÓN 2: GESTIÓN DE BANNERS (CARRUSEL) -->
+                <div id="tab-banners" class="hidden space-y-4">
+                    <div class="bg-slate-50 p-4 rounded-xl border space-y-3">
+                        <h4 class="font-bold text-slate-700 text-sm">Agregar Banner Promocional al Carrusel</h4>
+                        <input type="text" id="banner-titulo" placeholder="Título o Descripción corta de la promo" class="w-full border rounded-lg px-3 py-2 text-sm">
+                        <input type="text" id="banner-imagen" placeholder="URL de la imagen del banner (Sube a ImgBB)" class="w-full border rounded-lg px-3 py-2 text-sm">
+                        <input type="text" id="banner-link" placeholder="Enlace de destino (Opcional, ej. https://wa.me/...)" class="w-full border rounded-lg px-3 py-2 text-sm">
+                        <button onclick="guardarBanner()" class="w-full bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition text-sm">Guardar Banner en Carrusel</button>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border space-y-2">
+                        <h4 class="font-bold text-slate-700 text-xs mb-2">Banners Activos:</h4>
+                        <div id="lista-banners-admin" class="space-y-1 text-xs max-h-48 overflow-y-auto"></div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 3: CATEGORÍAS -->
                 <div id="tab-categorias" class="hidden space-y-4">
                     <div class="bg-slate-50 p-4 rounded-xl border space-y-3">
                         <h4 class="font-bold text-slate-700 text-sm" id="titulo-form-cat">Agregar Nueva Categoría</h4>
@@ -244,7 +281,7 @@
                     </div>
                 </div>
 
-                <!-- SECCIÓN 3: ENTRADAS Y SALIDAS -->
+                <!-- SECCIÓN 4: ENTRADAS Y SALIDAS -->
                 <div id="tab-movimientos" class="hidden space-y-4">
                     <div class="bg-slate-50 p-4 rounded-xl border space-y-3">
                         <h4 class="font-bold text-slate-700 text-sm">Registrar Entrada (Compra) o Salida (Venta Física)</h4>
@@ -261,7 +298,7 @@
                     </div>
                 </div>
 
-                <!-- SECCIÓN 4: PROVEEDORES -->
+                <!-- SECCIÓN 5: PROVEEDORES -->
                 <div id="tab-proveedores" class="hidden space-y-4">
                     <div class="bg-slate-50 p-4 rounded-xl border space-y-3">
                         <h4 class="font-bold text-slate-700 text-sm">Registrar Proveedor</h4>
@@ -273,26 +310,11 @@
                     <div id="lista-proveedores-admin" class="space-y-2 max-h-40 overflow-y-auto text-xs"></div>
                 </div>
 
-                <!-- SECCIÓN 5: AGENTE META -->
-                <div id="tab-agente" class="hidden space-y-4">
-                    <div class="bg-slate-50 p-4 rounded-xl border">
-                        <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2 mb-2">
-                            <i class="fa-solid fa-robot text-verdeOscuro"></i> Agente Creativo para Meta
-                        </h4>
-                        <p class="text-xs text-slate-500 mb-3">Escribe el producto u oferta que quieres lanzar hoy:</p>
-                        <div class="flex gap-2">
-                            <input type="text" id="input-agente-admin" placeholder="Ej. Vasos de foam para cafeterías" class="flex-1 border rounded-lg px-3 py-2 text-xs">
-                            <button onclick="consultarAgente()" class="bg-verdeOscuro text-amarilloLogo px-4 py-2 rounded-lg text-xs font-bold hover:bg-verdeMedio">Generar</button>
-                        </div>
-                        <div id="respuesta-agente" class="mt-4 bg-white p-4 rounded-lg text-xs text-slate-700 hidden border shadow-sm space-y-3"></div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
 
-    <!-- Scripts de Firebase y Lógica -->
+    <!-- Scripts de Firebase y Lógica del Carrusel -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, setDoc, getDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -312,12 +334,16 @@
 
         let productosGlobales = [];
         let categoriasGlobales = [];
+        let bannersGlobales = [];
+        let slideActual = 0;
+        let intervaloCarrusel = null;
         let modoExpectativaActivo = false;
 
-        // Carga inicial al abrir la página web
         window.addEventListener('DOMContentLoaded', async () => {
             await verificarModoExpectativaPublico();
+            await cargarBannersPublicos();
             await cargarCatalogoPublico();
+            iniciarAutoplayCarrusel();
         });
 
         async function verificarModoExpectativaPublico() {
@@ -339,8 +365,107 @@
                     if(vistaTerminada) vistaTerminada.classList.remove('hidden');
                 }
             } catch(e) {
-                console.log("Usando vista predeterminada terminada");
+                console.log("Modo predeterminado activo");
             }
+        }
+
+        async function cargarBannersPublicos() {
+            const container = document.getElementById('carrusel-slides-container');
+            const dotsContainer = document.getElementById('carrusel-dots');
+            if(!container) return;
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "banners"));
+                bannersGlobales = [];
+
+                if (querySnapshot.empty) {
+                    // Banners de respaldo por defecto si no ha agregado ninguno
+                    bannersGlobales = [
+                        { titulo: "¡Celebra y Ahorra en Desechables Básicos!", imagen: "https://i.ibb.co/MxWKPYZ1/vaso-81.jpg", link: "https://wa.me/50368483933" },
+                        { titulo: "Gran Variedad en Vasos y Bandejas al por Mayor", imagen: "https://i.ibb.co/607Kv0Dd/Dise-o-sin-t-tulo-10.png", link: "https://wa.me/50368483933" }
+                    ];
+                } else {
+                    querySnapshot.forEach(docSnap => {
+                        bannersGlobales.push({ id: docSnap.id, ...docSnap.data() });
+                    });
+                }
+
+                renderizarCarrusel();
+            } catch(e) {
+                console.error("Error al cargar banners", e);
+            }
+        }
+
+        function renderizarCarrusel() {
+            const container = document.getElementById('carrusel-slides-container');
+            const dotsContainer = document.getElementById('carrusel-dots');
+            if(!container || !dotsContainer) return;
+
+            container.innerHTML = '';
+            dotsContainer.innerHTML = '';
+
+            bannersGlobales.forEach((b, index) => {
+                const linkWrapperOpen = b.link ? `<a href="${b.link}" target="_blank" class="block w-full h-full relative">` : `<div class="w-full h-full relative">`;
+                const linkWrapperClose = b.link ? `</a>` : `</div>`;
+
+                container.innerHTML += `
+                    <div class="min-w-full h-full relative flex-shrink-0">
+                        ${linkWrapperOpen}
+                            <img src="${b.imagen}" alt="${b.titulo || 'Promoción'}" class="w-full h-full object-cover">
+                            <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 text-white">
+                                <h3 class="text-sm sm:text-lg font-bold text-amarilloLogo">${b.titulo || ''}</h3>
+                            </div>
+                        ${linkWrapperClose}
+                    </div>
+                `;
+
+                dotsContainer.innerHTML += `
+                    <button onclick="irASlide(${index})" class="w-3 h-3 rounded-full transition ${index === slideActual ? 'bg-amarilloLogo scale-125' : 'bg-white/50 hover:bg-white'}"></button>
+                `;
+            });
+            actualizarPosicionCarrusel();
+        }
+
+        window.moverSlide = function(direccion) {
+            slideActual += direccion;
+            if (slideActual < 0) slideActual = bannersGlobales.length - 1;
+            if (slideActual >= bannersGlobales.length) slideActual = 0;
+            actualizarPosicionCarrusel();
+            reiniciarAutoplay();
+        }
+
+        window.irASlide = function(index) {
+            slideActual = index;
+            actualizarPosicionCarrusel();
+            reiniciarAutoplay();
+        }
+
+        function actualizarPosicionCarrusel() {
+            const container = document.getElementById('carrusel-slides-container');
+            const dotsContainer = document.getElementById('carrusel-dots');
+            if(!container) return;
+            container.style.transform = `translateX(-${slideActual * 100}%)`;
+
+            if(dotsContainer) {
+                const dots = dotsContainer.children;
+                for(let i=0; i<dots.length; i++) {
+                    dots[i].className = `w-3 h-3 rounded-full transition ${i === slideActual ? 'bg-amarilloLogo scale-125' : 'bg-white/50 hover:bg-white'}`;
+                }
+            }
+        }
+
+        function iniciarAutoplayCarrusel() {
+            intervaloCarrusel = setInterval(() => {
+                if(bannersGlobales.length > 1) {
+                    slideActual = (slideActual + 1) % bannersGlobales.length;
+                    actualizarPosicionCarrusel();
+                }
+            }, 5000); // Cambia cada 5 segundos automáticamente
+        }
+
+        function reiniciarAutoplay() {
+            clearInterval(intervaloCarrusel);
+            iniciarAutoplayCarrusel();
         }
 
         async function cargarCatalogoPublico() {
@@ -364,8 +489,7 @@
 
                 renderizarProductos(productosGlobales);
             } catch(e) {
-                console.error("Error al cargar catálogo público", e);
-                gridPublico.innerHTML = '<p class="text-red-500 text-center col-span-full py-12">Error al conectar con la base de datos.</p>';
+                console.error("Error al cargar catálogo", e);
             }
         }
 
@@ -389,7 +513,7 @@
                                 <h3 class="font-bold text-slate-800 text-base mt-1">${p.nombre}</h3>
                                 <p class="text-green-700 font-extrabold text-lg mt-1">$${precioNum.toFixed(2)}</p>
                             </div>
-                            <a href="https://wa.me/50368483933?text=Hola,%20estoy%20interesado%20en%20el%20producto:%20${encodeURIComponent(p.nombre)}%20(Precio:%20$${precioNum.toFixed(2)})" target="_blank" class="w-full bg-verdeOsc0ro hover:bg-verdeMedio bg-[#132A13] text-amarilloLogo py-2 rounded-xl text-xs font-bold text-center transition flex items-center justify-center gap-2 shadow">
+                            <a href="https://wa.me/50368483933?text=Hola,%20estoy%20interesado%20en%20el%20producto:%20${encodeURIComponent(p.nombre)}%20(Precio:%20$${precioNum.toFixed(2)})" target="_blank" class="w-full bg-[#132A13] text-amarilloLogo py-2 rounded-xl text-xs font-bold text-center transition flex items-center justify-center gap-2 shadow hover:bg-verdeMedio">
                                 <i class="fa-brands fa-whatsapp text-sm"></i> Pedir por WhatsApp
                             </a>
                         </div>
@@ -404,12 +528,67 @@
             renderizarProductos(filtrados);
         }
 
-        // Funciones del Administrador
+        // Panel Admin y Banners
         async function cargarDatosAdmin() {
             await cargarCategorias();
             await cargarCatalogoAdmin();
+            await cargarBannersAdmin();
             await cargarProveedoresAdmin();
             await actualizarBotonExpectativaAdmin();
+        }
+
+        async function cargarBannersAdmin() {
+            const lista = document.getElementById('lista-banners-admin');
+            if(!lista) return;
+            try {
+                const querySnapshot = await getDocs(collection(db, "banners"));
+                lista.innerHTML = '';
+                if(querySnapshot.empty) {
+                    lista.innerHTML = '<p class="text-slate-400">No hay banners en el carrusel.</p>';
+                    return;
+                }
+                querySnapshot.forEach(docSnap => {
+                    const b = docSnap.data();
+                    lista.innerHTML += `
+                        <div class="flex justify-between items-center border-b py-1.5">
+                            <div><b>${b.titulo || 'Sin título'}</b><br><span class="text-[10px] text-gray-400">${b.imagen}</span></div>
+                            <button onclick="eliminarBanner('${docSnap.id}')" class="bg-red-500 text-white px-2 py-1 rounded text-[10px] font-bold">Eliminar</button>
+                        </div>
+                    `;
+                });
+            } catch(e) { console.log(e); }
+        }
+
+        window.guardarBanner = async function() {
+            const titulo = document.getElementById('banner-titulo').value.trim();
+            const imagen = document.getElementById('banner-imagen').value.trim();
+            const link = document.getElementById('banner-link').value.trim();
+
+            if(!imagen) return alert('⚠️ Ingresa al menos la URL de la imagen del banner.');
+
+            try {
+                await addDoc(collection(db, "banners"), { titulo, imagen, link, fecha: new Date() });
+                alert('✅ Banner guardado con éxito.');
+                document.getElementById('banner-titulo').value = '';
+                document.getElementById('banner-imagen').value = '';
+                document.getElementById('banner-link').value = '';
+                cargarBannersAdmin();
+                cargarBannersPublicos();
+            } catch(e) {
+                alert('❌ Error al guardar el banner.');
+            }
+        }
+
+        window.eliminarBanner = async function(id) {
+            if(!confirm('¿Estás seguro de eliminar este banner del carrusel?')) return;
+            try {
+                await deleteDoc(doc(db, "banners", id));
+                alert('✅ Banner eliminado.');
+                cargarBannersAdmin();
+                cargarBannersPublicos();
+            } catch(e) {
+                alert('❌ Error al eliminar banner.');
+            }
         }
 
         async function actualizarBotonExpectativaAdmin() {
@@ -435,151 +614,126 @@
                 await verificarModoExpectativaPublico();
                 alert(`✅ El modo de la página ha cambiado correctamente.`);
             } catch(e) {
-                alert('❌ Error al cambiar el modo de la página.');
+                alert('❌ Error al cambiar el modo.');
             }
         }
 
         async function cargarCategorias() {
             const selectNuevoProd = document.getElementById('nuevo-categoria');
             const listaCategoriasAdmin = document.getElementById('lista-categorias-admin');
-            
             try {
                 const querySnapshot = await getDocs(collection(db, "categorias"));
                 categoriasGlobales = [];
                 if(selectNuevoProd) selectNuevoProd.innerHTML = '';
                 if(listaCategoriasAdmin) listaCategoriasAdmin.innerHTML = '';
-
-                const categoriasBase = querySnapshot.empty ? ["Vasos de Foam", "Bandejas y Aluminio", "Servilletas"] : [];
-
-                if (querySnapshot.empty) {
-                    for(let cat of categoriasBase) {
-                        await addDoc(collection(db, "categorias"), { nombre: cat });
-                        categoriasGlobales.push({ id: cat, nombre: cat });
-                    }
-                } else {
-                    querySnapshot.forEach(docSnap => {
-                        const data = docSnap.data();
-                        categoriasGlobales.push({ id: docSnap.id, nombre: data.nombre });
-                    });
-                }
-
-                categoriasGlobales.forEach(cat => {
-                    if(selectNuevoProd) {
-                        selectNuevoProd.innerHTML += `<option value="${cat.nombre}">${cat.nombre}</option>`;
-                    }
-                    if(listaCategoriasAdmin) {
-                        listaCategoriasAdmin.innerHTML += `
-                            <div class="flex justify-between items-center border-b py-1">
-                                <span><b>${cat.nombre}</b></span>
-                                <div class="flex gap-1">
-                                    <button onclick="prepararEdicionCat('${cat.id}', '${cat.nombre}')" class="bg-amber-500 hover:bg-amber-600 text-white px-2 py-0.5 rounded text-[10px] font-bold"><i class="fa-solid fa-pen"></i></button>
-                                    <button onclick="eliminarCategoria('${cat.id}')" class="bg-red-500 hover:bg-red-600 text-white px-2 py-0.5 rounded text-[10px] font-bold"><i class="fa-solid fa-trash"></i></button>
-                                </div>
-                            </div>`;
-                    }
+                querySnapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    categoriasGlobales.push({ id: docSnap.id, nombre: data.nombre });
                 });
-
-            } catch(e) {
-                console.error("Error al cargar categorías", e);
-            }
+                categoriasGlobales.forEach(cat => {
+                    if(selectNuevoProd) selectNuevoProd.innerHTML += `<option value="${cat.nombre}">${cat.nombre}</option>`;
+                    if(listaCategoriasAdmin) listaCategoriasAdmin.innerHTML += `<div class="flex justify-between items-center border-b py-1"><span><b>${cat.nombre}</b></span><button onclick="eliminarCategoria('${cat.id}')" class="bg-red-500 text-white px-2 py-0.5 rounded text-[10px]">Eliminar</button></div>`;
+                });
+            } catch(e) { console.log(e); }
         }
 
         async function cargarCatalogoAdmin() {
             const listaStock = document.getElementById('lista-stock-admin');
             const selectMov = document.getElementById('mov-producto');
             const labelInversion = document.getElementById('total-inversion-global');
-            
-            if(listaStock) listaStock.innerHTML = '<p class="text-slate-400 text-center py-2">Cargando inventario...</p>';
-
             try {
                 const querySnapshot = await getDocs(collection(db, "productos"));
                 productosGlobales = [];
                 if(listaStock) listaStock.innerHTML = '';
                 if(selectMov) selectMov.innerHTML = '';
-
                 let inversionTotalGeneral = 0;
-
-                if (querySnapshot.empty) {
-                    if(listaStock) listaStock.innerHTML = '<p class="text-slate-400 text-center py-4">No hay productos registrados todavía.</p>';
-                    if(selectMov) selectMov.innerHTML = '<option value="">No hay productos disponibles</option>';
-                    if(labelInversion) labelInversion.innerText = 'Inversión Total: $0.00';
-                    return;
-                }
-
                 querySnapshot.forEach((docSnap) => {
                     const data = docSnap.data();
                     productosGlobales.push({ id: docSnap.id, ...data });
-                    
                     const precioNum = parseFloat(data.precio) || 0;
                     const stockNum = parseInt(data.stock) || 0;
-                    const subtotalItem = precioNum * stockNum;
-                    inversionTotalGeneral += subtotalItem;
-                    
+                    inversionTotalGeneral += (precioNum * stockNum);
                     if(listaStock) {
-                        listaStock.innerHTML += `
-                            <div class="flex justify-between items-center border-b py-1.5">
-                                <div>
-                                    <b>${data.nombre}</b> <span class="text-gray-500">($${precioNum.toFixed(2)} c/u)</span><br>
-                                    <span class="text-[10px] text-slate-400">Cat: ${data.categoria || 'General'} | Stock: ${stockNum}</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <div class="text-right">
-                                        <div class="text-[10px] text-green-700 font-bold">Inv: $${subtotalItem.toFixed(2)}</div>
-                                    </div>
-                                    <button onclick="prepararEdicionProd('${docSnap.id}', '${data.nombre}', '${data.precio}', '${data.categoria}', '${data.stock}', '${data.imagen || ''}')" class="bg-amber-500 hover:bg-amber-600 text-white px-2 py-1 rounded text-[10px] font-bold" title="Editar">
-                                        <i class="fa-solid fa-pen"></i>
-                                    </button>
-                                    <button onclick="eliminarProducto('${docSnap.id}', '${data.nombre}')" class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-[10px] font-bold" title="Eliminar">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>`;
+                        listaStock.innerHTML += `<div class="flex justify-between items-center border-b py-1.5"><div><b>${data.nombre}</b> ($${precioNum.toFixed(2)})<br><span class="text-[10px] text-slate-400">Stock: ${stockNum}</span></div><button onclick="eliminarProducto('${docSnap.id}', '${data.nombre}')" class="bg-red-500 text-white px-2 py-1 rounded text-[10px]">Eliminar</button></div>`;
                     }
-                    if(selectMov) {
-                        selectMov.innerHTML += `<option value="${docSnap.id}">${data.nombre} (Stock actual: ${stockNum})</option>`;
-                    }
+                    if(selectMov) selectMov.innerHTML += `<option value="${docSnap.id}">${data.nombre} (Stock: ${stockNum})</option>`;
                 });
-
-                if(labelInversion) {
-                    labelInversion.innerText = `Inversión Total: $${inversionTotalGeneral.toFixed(2)}`;
-                }
+                if(labelInversion) labelInversion.innerText = `Inversión Total: $${inversionTotalGeneral.toFixed(2)}`;
                 renderizarProductos(productosGlobales);
-            } catch (e) {
-                console.error("Error al cargar productos", e);
-            }
+            } catch (e) { console.log(e); }
         }
 
-        window.exportarExcel = function() {
-            if(productosGlobales.length === 0) {
-                alert('⚠️ No hay productos en el inventario para exportar.');
-                return;
-            }
+        window.guardarNuevoProducto = async function() {
+            const nombre = document.getElementById('nuevo-nombre').value.trim();
+            const precio = parseFloat(document.getElementById('nuevo-precio').value) || 0;
+            const categoria = document.getElementById('nuevo-categoria').value;
+            const stock = parseInt(document.getElementById('nuevo-stock').value) || 0;
+            const imagen = document.getElementById('nuevo-imagen').value.trim();
+            if(!nombre || !precio) return alert('Completa nombre y precio.');
+            try {
+                await addDoc(collection(db, "productos"), { nombre, precio, categoria, stock, imagen, fecha: new Date() });
+                alert('✅ Producto guardado.');
+                document.getElementById('nuevo-nombre').value = '';
+                document.getElementById('nuevo-precio').value = '';
+                document.getElementById('nuevo-stock').value = '';
+                document.getElementById('nuevo-imagen').value = '';
+                cargarCatalogoAdmin();
+            } catch(e) { alert('Error al guardar.'); }
+        }
 
-            let csvContent = "\uFEFF";
-            csvContent += "Producto,Categoría,Precio Unitario ($),Stock Actual,Inversión Total ($)\n";
+        window.eliminarProducto = async function(id, nombre) {
+            if(!confirm(`¿Eliminar ${nombre}?`)) return;
+            try {
+                await deleteDoc(doc(db, "productos", id));
+                cargarCatalogoAdmin();
+            } catch(e) { alert('Error al eliminar.'); }
+        }
 
-            let inversionTotal = 0;
-            productosGlobales.forEach(p => {
-                const precio = parseFloat(p.precio) || 0;
-                const stock = parseInt(p.stock) || 0;
-                const subtotal = precio * stock;
-                inversionTotal += subtotal;
+        window.guardarCategoria = async function() {
+            const cat = document.getElementById('nueva-categoria-input').value.trim();
+            if(!cat) return;
+            try {
+                await addDoc(collection(db, "categorias"), { nombre: cat });
+                document.getElementById('nueva-categoria-input').value = '';
+                cargarCategorias();
+            } catch(e) { alert('Error'); }
+        }
 
-                const nombreLimpio = `"${(p.nombre || '').replace(/"/g, '""')}"`;
-                const catLimpias = `"${(p.categoria || '').replace(/"/g, '""')}"`;
-                csvContent += `${nombreLimpio},${catLimpias},${precio.toFixed(2)},${stock},${subtotal.toFixed(2)}\n`;
-            });
+        window.eliminarCategoria = async function(id) {
+            try { await deleteDoc(doc(db, "categorias", id)); cargarCategorias(); } catch(e){}
+        }
 
-            csvContent += `\n,,,,,TOTAL INVERSIÓN:,$${inversionTotal.toFixed(2)}`;
+        window.registrarMovimiento = async function() {
+            const prodId = document.getElementById('mov-producto').value;
+            const tipo = document.getElementById('mov-tipo').value;
+            const cantidad = parseInt(document.getElementById('mov-cantidad').value) || 0;
+            if(cantidad <= 0) return alert('Cantidad inválida');
+            try {
+                const ajuste = tipo === 'entrada' ? cantidad : -cantidad;
+                await updateDoc(doc(db, "productos", prodId), { stock: increment(ajuste) });
+                alert('✅ Stock actualizado');
+                cargarCatalogoAdmin();
+            } catch(e){ alert('Error'); }
+        }
 
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.setAttribute("href", url);
-            link.setAttribute("download", `Inventario_DesechablesBásicos_${new Date().toISOString().slice(0,10)}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+        window.guardarProveedor = async function() {
+            const nombre = document.getElementById('prov-nombre').value;
+            if(!nombre) return alert('Ingresa nombre');
+            try {
+                await addDoc(collection(db, "proveedores"), { nombre, fecha: new Date() });
+                alert('✅ Proveedor guardado');
+                document.getElementById('prov-nombre').value = '';
+            } catch(e){}
+        }
+
+        async function cargarProveedoresAdmin() {
+            const cont = document.getElementById('lista-proveedores-admin');
+            if(!cont) return;
+            try {
+                const snap = await getDocs(collection(db, "proveedores"));
+                cont.innerHTML = '';
+                snap.forEach(d => { cont.innerHTML += `<div class="border-b py-1"><b>${d.data().nombre}</b></div>`; });
+            } catch(e){}
         }
 
         let chatIniciado = false;
@@ -588,48 +742,37 @@
             ventana.classList.toggle('hidden');
             if(!chatIniciado && !ventana.classList.contains('hidden')) {
                 chatIniciado = true;
-                document.getElementById('chat-mensajes-bot').innerHTML = `
-                    <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-100">
-                        <b>DB Bot:</b> Hola, actualmente estamos actualizando nuestro sistema. Si deseas hacer un pedido u oprimir <b>1</b> para hablar con nuestro personal, escríbenos.
-                    </div>
-                `;
+                document.getElementById('chat-mensajes-bot').innerHTML = `<div class="bg-white p-3 rounded-xl shadow-sm border"><b>DB Bot:</b> ¡Hola! Escríbenos para cualquier consulta o pedido.</div>`;
             }
         }
-
         window.manejarEnter = function(e) { if(e.key === 'Enter') enviarMensajeBot(); }
-
         window.enviarMensajeBot = function() {
             const input = document.getElementById('input-chat-bot');
             const texto = input.value.trim();
             if(!texto) return;
             const contenedor = document.getElementById('chat-mensajes-bot');
-            
-            contenedor.innerHTML += `<div class="text-right"><span class="inline-block bg-verdeOscuro text-amarilloLogo px-3 py-1.5 rounded-lg">${texto}</span></div>`;
+            contenedor.innerHTML += `<div class="text-right"><span class="inline-block bg-verdeOscuro text-amarilloLogo px-3 py-1 rounded">${texto}</span></div>`;
             input.value = '';
-            contenedor.scrollTop = contenedor.scrollHeight;
-
             setTimeout(() => {
-                let respuesta = texto === "1" ? "Gracias por contactarnos. Te estamos comunicando con nuestro personal por WhatsApp." : `Hemos registrado tu mensaje: "${texto}". Nos pondremos en contacto contigo muy pronto o puedes escribirnos al 6848-3933.`;
-                contenedor.innerHTML += `<div class="bg-white p-3 rounded-xl shadow-sm border border-slate-100"><b>DB Bot:</b> ${respuesta}</div>`;
+                contenedor.innerHTML += `<div class="bg-white p-3 rounded-xl shadow-sm border"><b>DB Bot:</b> Hemos registrado tu mensaje. Te atenderemos en breve por WhatsApp.</div>`;
                 contenedor.scrollTop = contenedor.scrollHeight;
-                if(texto === "1") {
-                    setTimeout(() => window.open("https://wa.me/50368483933?text=Hola,%20presioné%201%20en%20el%20bot%20de%20la%20web", "_blank"), 1500);
-                }
             }, 600);
         }
 
-        window.cambiarTabAdmin = function(tab) {
-            ['productos', 'categorias', 'movimientos', 'proveedores', 'agente'].forEach(t => {
-                document.getElementById(`tab-${t}`).classList.add('hidden');
-                document.getElementById(`tab-btn-${t}`).className = "bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap";
-            });
-            document.getElementById(`tab-${tab}`).classList.remove('hidden');
-            document.getElementById(`tab-btn-${tab}`).className = "bg-verdeOscuro text-amarilloLogo px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap";
+        window.exportarExcel = function() {
+            if(productosGlobales.length === 0) return alert('No hay productos.');
+            let csv = "\uFEFFProducto,Categoría,Precio,Stock\n";
+            productosGlobales.forEach(p => { csv += `"${p.nombre}","${p.categoria || ''}",${p.precio},${p.stock}\n`; });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "Inventario.csv";
+            a.click();
         }
 
         window.abrirAdminModal = function() { document.getElementById('modal-admin').classList.remove('hidden'); }
         window.cerrarAdminModal = function() { document.getElementById('modal-admin').classList.add('hidden'); }
-
         window.verificarAdmin = function() {
             if(document.getElementById('admin-pass').value === 'Desechables1982') {
                 document.getElementById('login-container').classList.add('hidden');
@@ -637,238 +780,13 @@
                 cargarDatosAdmin();
             } else { alert('Clave incorrecta'); }
         }
-
-        window.guardarCategoria = async function() {
-            const catId = document.getElementById('edit-cat-id').value;
-            const catInput = document.getElementById('nueva-categoria-input').value.trim();
-            if(!catInput) return alert('⚠️ Escribe el nombre de la categoría.');
-
-            try {
-                if(catId) {
-                    await updateDoc(doc(db, "categorias", catId), { nombre: catInput });
-                    alert(`✅ Categoría actualizada con éxito.`);
-                } else {
-                    await addDoc(collection(db, "categorias"), { nombre: catInput });
-                    alert(`✅ Categoría "${catInput}" guardada con éxito.`);
-                }
-                cancelarEdicionCat();
-                cargarCategorias();
-            } catch(e) {
-                alert('❌ Error al guardar la categoría.');
-            }
-        }
-
-        window.prepararEdicionCat = function(id, nombre) {
-            document.getElementById('edit-cat-id').value = id;
-            document.getElementById('nueva-categoria-input').value = nombre;
-            document.getElementById('titulo-form-cat').innerText = "✏️ Editar Categoría";
-            document.getElementById('btn-guardar-cat').innerText = "Actualizar Categoría";
-            document.getElementById('btn-cancelar-cat').classList.remove('hidden');
-        }
-
-        window.cancelarEdicionCat = function() {
-            document.getElementById('edit-cat-id').value = '';
-            document.getElementById('nueva-categoria-input').value = '';
-            document.getElementById('titulo-form-cat').innerText = "Agregar Nueva Categoría";
-            document.getElementById('btn-guardar-cat').innerText = "Guardar Categoría";
-            document.getElementById('btn-cancelar-cat').classList.add('hidden');
-        }
-
-        window.eliminarCategoria = async function(id) {
-            if(!confirm('¿Estás seguro de eliminar esta categoría?')) return;
-            try {
-                await deleteDoc(doc(db, "categorias", id));
-                alert('✅ Categoría eliminada.');
-                cargarCategorias();
-            } catch(e) {
-                alert('❌ Error al eliminar la categoría.');
-            }
-        }
-
-        window.guardarNuevoProducto = async function() {
-            const prodId = document.getElementById('edit-prod-id').value;
-            const nombreInput = document.getElementById('nuevo-nombre').value.trim();
-            const precioVal = document.getElementById('nuevo-precio').value.trim();
-            const categoria = document.getElementById('nuevo-categoria').value;
-            const stockVal = document.getElementById('nuevo-stock').value.trim();
-            const imagen = document.getElementById('nuevo-imagen').value.trim();
-
-            if(!nombreInput || !precioVal) {
-                alert('⚠️ Por favor completa al menos el nombre y el precio unitario.');
-                return;
-            }
-
-            const precio = parseFloat(precioVal);
-            const stock = parseInt(stockVal) || 0;
-
-            if(!prodId) {
-                const nombreLimpio = nombreInput.toLowerCase();
-                const yaExiste = productosGlobales.some(p => p.nombre && p.nombre.toLowerCase() === nombreLimpio);
-                if (yaExiste) {
-                    alert(`⚠️ ¡Producto Duplicado!\n\nEl producto "${nombreInput}" ya se encuentra registrado.`);
-                    return;
-                }
-            }
-
-            const btnGuardar = document.getElementById('btn-guardar-prod');
-            btnGuardar.innerText = 'Guardando en Firebase...';
-            btnGuardar.disabled = true;
-
-            try {
-                if(prodId) {
-                    await updateDoc(doc(db, "productos", prodId), { nombre: nombreInput, precio, categoria, stock, imagen });
-                    alert(`✅ Producto "${nombreInput}" actualizado con éxito.`);
-                } else {
-                    await addDoc(collection(db, "productos"), { nombre: nombreInput, precio, categoria, stock, imagen, fecha: new Date() });
-                    alert(`✅ Producto "${nombreInput}" guardado con éxito.`);
-                }
-
-                cancelarEdicion();
-                await cargarCatalogoAdmin();
-            } catch(e) {
-                console.error("Error al guardar:", e);
-                alert('❌ Error al guardar en Firebase.');
-            } finally {
-                btnGuardar.innerText = 'Guardar en Inventario';
-                btnGuardar.disabled = false;
-            }
-        }
-
-        window.prepararEdicionProd = function(id, nombre, precio, categoria, stock, imagen) {
-            document.getElementById('edit-prod-id').value = id;
-            document.getElementById('nuevo-nombre').value = nombre;
-            document.getElementById('nuevo-precio').value = precio;
-            document.getElementById('nuevo-categoria').value = categoria;
-            document.getElementById('nuevo-stock').value = stock;
-            document.getElementById('nuevo-imagen').value = imagen;
-
-            document.getElementById('titulo-form-producto').innerText = "✏️ Editar Producto";
-            document.getElementById('btn-guardar-prod').innerText = "Actualizar Producto";
-            document.getElementById('btn-cancelar-edit').classList.remove('hidden');
-            cambiarTabAdmin('productos');
-        }
-
-        window.cancelarEdicion = function() {
-            document.getElementById('edit-prod-id').value = '';
-            document.getElementById('nuevo-nombre').value = '';
-            document.getElementById('nuevo-precio').value = '';
-            document.getElementById('nuevo-stock').value = '';
-            document.getElementById('nuevo-imagen').value = '';
-
-            document.getElementById('titulo-form-producto').innerText = "Registrar Nuevo Producto / Stock Inicial";
-            document.getElementById('btn-guardar-prod').innerText = "Guardar en Inventario";
-            document.getElementById('btn-cancelar-edit').classList.add('hidden');
-        }
-
-        window.eliminarProducto = async function(id, nombre) {
-            if(!confirm(`¿Estás seguro de eliminar el producto "${nombre}" del inventario?`)) return;
-            try {
-                await deleteDoc(doc(db, "productos", id));
-                alert(`✅ Producto "${nombre}" eliminado con éxito.`);
-                await cargarCatalogoAdmin();
-            } catch(e) {
-                alert('❌ Error al eliminar el producto.');
-            }
-        }
-
-        window.registrarMovimiento = async function() {
-            const prodId = document.getElementById('mov-producto').value;
-            const tipo = document.getElementById('mov-tipo').value;
-            const cantidad = parseInt(document.getElementById('mov-cantidad').value) || 0;
-            const detalle = document.getElementById('mov-detalle').value;
-
-            if(cantidad <= 0) {
-                alert('Ingresa una cantidad válida.');
-                return;
-            }
-
-            try {
-                const prodRef = doc(db, "productos", prodId);
-                const ajuste = tipo === 'entrada' ? cantidad : -cantidad;
-                
-                await updateDoc(prodRef, { stock: increment(ajuste) });
-                await addDoc(collection(db, "movimientos"), { productoId: prodId, tipo, cantidad, detalle, fecha: new Date() });
-
-                alert(`✅ ¡Stock actualizado con éxito! (${tipo === 'entrada' ? '+' : '-'}${cantidad} unidades)`);
-                document.getElementById('mov-cantidad').value = '';
-                document.getElementById('mov-detalle').value = '';
-                cargarCatalogoAdmin();
-            } catch(e) { 
-                alert('Error al registrar movimiento'); 
-            }
-        }
-
-        window.guardarProveedor = async function() {
-            const nombre = document.getElementById('prov-nombre').value;
-            const contacto = document.getElementById('prov-contacto').value;
-            const producto = document.getElementById('prov-producto').value;
-
-            if(!nombre) {
-                alert('Ingresa el nombre del proveedor.');
-                return;
-            }
-
-            try {
-                await addDoc(collection(db, "proveedores"), { nombre, contacto, producto, fecha: new Date() });
-                alert('✅ ¡Proveedor registrado con éxito!');
-                document.getElementById('prov-nombre').value = '';
-                document.getElementById('prov-contacto').value = '';
-                document.getElementById('prov-producto').value = '';
-                cargarProveedoresAdmin();
-            } catch(e) { 
-                alert('Error al guardar proveedor'); 
-            }
-        }
-
-        async function cargarProveedoresAdmin() {
-            const contenedor = document.getElementById('lista-proveedores-admin');
-            if(!contenedor) return;
-            try {
-                const querySnapshot = await getDocs(collection(db, "proveedores"));
-                contenedor.innerHTML = '<h4 class="font-bold text-slate-700 text-xs mb-1">Proveedores Registrados:</h4>';
-                if(querySnapshot.empty) {
-                    contenedor.innerHTML += '<p class="text-slate-400">No hay proveedores registrados.</p>';
-                    return;
-                }
-                querySnapshot.forEach(docSnap => {
-                    const p = docSnap.data();
-                    contenedor.innerHTML += `<div class="border-b py-1"><b>${p.nombre}</b> - Tel: ${p.contacto || 'N/A'} (Suministra: ${p.producto || 'N/A'})</div>`;
-                });
-            } catch(e) { console.log(e); }
-        }
-
-        window.consultarAgente = function() {
-            const texto = document.getElementById('input-agente-admin').value;
-            const caja = document.getElementById('respuesta-agente');
-            if(!texto) return;
-
-            caja.classList.remove('hidden');
-            caja.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> El agente está diseñando tu estrategia para Facebook e Instagram...';
-
-            setTimeout(() => {
-                const copyGenerado = `¡Abastece tu negocio o evento al mejor precio! 📦🥤\n\nEn **Desechables Básicos** estamos renovándonos para ti:\n👉 ${texto}\n\nCalidad garantizada, resistencia y los mejores precios por mayor y detalle.\n\n📲 ¡Escríbenos al 6848-3933 o visítanos en Urbanización Santa Ana Norte, Polígono 15 #7!\n\n#DesechablesBasicos #VasosDeFoam #BandejasDeAluminio #ElSalvador`;
-                
-                caja.innerHTML = `
-                    <div>
-                        <strong class="text-verdeOscuro">🎨 Especificación de Diseño Visual:</strong>
-                        <p class="text-gray-600 mt-1 mb-3">Diseña una imagen limpia del producto ${texto} con los colores verde y amarillo y la dirección de Santa Ana Norte.</p>
-                        
-                        <strong class="text-verdeOscuro">✍️ Copy para Meta:</strong>
-                        <textarea id="texto-copy" class="w-full h-28 border p-2 rounded mt-1 text-xs bg-gray-50">${copyGenerado}</textarea>
-                        
-                        <button onclick="copiarTexto()" class="mt-2 bg-verdeOscuro text-amarilloLogo px-3 py-1.5 rounded font-bold text-xs hover:bg-verdeMedio transition">
-                            <i class="fa-solid fa-copy"></i> Copiar Copy
-                        </button>
-                    </div>
-                `;
-            }, 1000);
-        }
-
-        window.copiarTexto = function() {
-            const textarea = document.getElementById('texto-copy');
-            textarea.select();
-            document.execCommand('copy');
-            alert('¡Copy copiado al portapapeles!');
+        window.cambiarTabAdmin = function(tab) {
+            ['productos', 'banners', 'categorias', 'movimientos', 'proveedores'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+                document.getElementById(`tab-btn-${t}`).className = "bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap";
+            });
+            document.getElementById(`tab-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-btn-${tab}`).className = "bg-verdeOscuro text-amarilloLogo px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap";
         }
     </script>
 </body>
