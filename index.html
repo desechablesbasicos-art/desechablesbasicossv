@@ -3,248 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POS - Desechables Básicos</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 10px; }
-        .no-print-zone { max-width: 450px; margin: 0 auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .tabs { display: flex; margin-bottom: 20px; background: #eee; border-radius: 8px; padding: 5px; }
-        .tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; font-weight: bold; border-radius: 6px; font-size: 0.9em; }
-        .tab.active { background: white; color: #007bff; }
-        label { display: block; margin-top: 10px; font-weight: bold; font-size: 0.9em; }
-        input, select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-add { background: #ffc107; color: #000; }
-        .btn-sell { background: #28a745; color: white; font-size: 1.1em; }
-        .btn-primary { background: #007bff; color: white; }
-        .btn-danger { background: #dc3545; color: white; margin-top: 10px; }
-        .history-item { border-bottom: 1px solid #eee; padding: 12px 0; display: flex; justify-content: space-between; align-items: center; }
-        .btn-reprint { background: #3b82f6; color: white; padding: 6px 12px; font-size: 0.8em; width: auto; }
-
-        /* TICKET OPTIMIZADO PARA 58mm (PT-210) */
-        #ticket-printable {
-            width: 250px; 
-            background: white;
-            padding: 10px;
-            font-family: 'Courier New', Courier, monospace; 
-            font-size: 12px;
-            line-height: 1.1;
-            color: black;
-            border: 1px solid #eee;
-            margin: 0 auto;
-            display: none; 
-            white-space: pre-wrap;
-        }
-
-        @media print {
-            @page { margin: 0; }
-            body * { visibility: hidden; }
-            #ticket-printable { 
-                visibility: visible; 
-                display: block !important; 
-                position: absolute; left: 0; top: 0; width: 100%; border: none;
-            }
-        }
-    </style>
+    <title>Desechables Básicos - Panel de Agente IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
+<body class="bg-gray-50 font-sans">
 
-<div class="no-print-zone">
-    <div class="tabs">
-        <div class="tab active" onclick="window.switchTab('pos')">VENTA</div>
-        <div class="tab" onclick="window.switchTab('inv')">STOCK</div>
-        <div class="tab" onclick="window.switchTab('his')">HISTORIAL</div>
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="w-64 bg-slate-900 text-white flex flex-col justify-between hidden md:flex">
+            <div class="p-5">
+                <h1 class="text-xl font-bold text-orange-400 flex items-center gap-2">
+                    <i class="fa-solid fa-boxes-stacked"></i> Desechables Básicos
+                </h1>
+                <p class="text-xs text-slate-400 mt-1">Gestión y Agente Meta</p>
+                
+                <nav class="mt-8 space-y-2">
+                    <a href="#" onclick="cambiarVista('catalogo')" id="btn-catalogo" class="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-orange-600 text-white font-medium transition">
+                        <i class="fa-solid fa-box"></i> Catálogo
+                    </a>
+                    <a href="#" onclick="cambiarVista('agente')" id="btn-agente" class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition">
+                        <i class="fa-solid fa-robot"></i> Agente Redes (Meta)
+                    </a>
+                </nav>
+            </div>
+            <div class="p-4 bg-slate-800 text-xs text-slate-400 text-center">
+                Conectado a Firebase
+            </div>
+        </div>
+
+        <!-- Contenido Principal -->
+        <div class="flex-1 flex flex-col overflow-y-auto">
+            <!-- Header superior -->
+            <header class="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
+                <h2 id="titulo-vista" class="text-xl font-bold text-slate-800">Catálogo de Productos</h2>
+                <div class="flex items-center gap-3">
+                    <span class="text-sm font-medium text-slate-600">Negocio Activo</span>
+                    <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
+            </header>
+
+            <!-- Vistas Dinámicas -->
+            <main class="p-6">
+                
+                <!-- VISTA 1: CATÁLOGO -->
+                <div id="vista-catalogo" class="space-y-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex justify-between items-center">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800">Agregar Nuevo Producto</h3>
+                            <p class="text-sm text-slate-500">Registra vasos, bandejas o servilletas para el stock.</p>
+                        </div>
+                    </div>
+
+                    <!-- Formulario de producto -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <input type="text" id="nombre-prod" placeholder="Ej. Vaso de Foam 12oz" class="border rounded-lg px-4 py-2 focus:outline-orange-500">
+                        <input type="text" id="precio-prod" placeholder="Ej. $15.00 el ciento" class="border rounded-lg px-4 py-2 focus:outline-orange-500">
+                        <button onclick="guardarProducto()" class="bg-orange-600 text-white font-medium py-2 rounded-lg hover:bg-orange-700 transition">Guardar Producto</button>
+                    </div>
+
+                    <!-- Lista de productos -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
+                        <h3 class="text-md font-bold text-slate-800 mb-4">Tus Productos Registrados</h3>
+                        <div id="lista-productos" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- Los productos se cargarán aquí -->
+                            <p class="text-sm text-slate-400">Cargando productos desde Firebase...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VISTA 2: AGENTE REDES SOCIALES -->
+                <div id="vista-agente" class="hidden space-y-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                        <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-wand-magic-sparkles text-orange-600"></i> Asistente de Publicaciones (Meta)
+                        </h3>
+                        <p class="text-sm text-slate-500 mt-1">Selecciona un producto y el agente te pedirá el diseño visual exacto para publicar en Facebook e Instagram.</p>
+                    </div>
+
+                    <!-- Chat / Interacción con el Agente -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-100 flex flex-col h-[500px]">
+                        <div id="chat-mensajes" class="flex-1 p-6 overflow-y-auto space-y-4">
+                            <div class="flex items-start gap-3">
+                                <div class="bg-orange-600 text-white p-2 rounded-full"><i class="fa-solid fa-robot"></i></div>
+                                <div class="bg-slate-100 p-4 rounded-xl text-slate-800 max-w-lg text-sm">
+                                    ¡Hola! Soy tu agente de redes sociales para <b>Desechables Básicos</b>. Selecciona uno de tus productos o dime cuál quieres promocionar hoy en Facebook e Instagram para indicarte exactamente qué diseño gráfico necesito que me des.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Barra de entrada del chat -->
+                        <div class="p-4 border-t border-slate-100 flex gap-2">
+                            <input type="text" id="input-chat" placeholder="Escribe tu mensaje o el producto a promocionar..." class="flex-1 border rounded-lg px-4 py-2 focus:outline-orange-500 text-sm">
+                            <button onclick="enviarMensajeAgente()" class="bg-slate-900 text-white px-6 py-2 rounded-lg hover:bg-slate-800 transition text-sm">Enviar</button>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
     </div>
 
-    <div id="section-pos">
-        <label>Producto:</label>
-        <select id="sel-prod" onchange="window.mostrarDisp()"></select>
-        <div id="disp-actual" style="font-size:0.8em; color:#666; margin-bottom:10px;"></div>
-        <input type="number" id="inp-qty" value="1" min="1">
-        <button class="btn-add" onclick="window.addToCart()">🛒 Añadir al Carrito</button>
-        <div id="items-list" style="margin-top:20px; border-top: 1px solid #eee; padding-top: 10px;"></div>
-        <label>Descuento $:</label>
-        <input type="number" id="inp-disc" value="0.00" step="0.01" oninput="window.updateTotals()">
-        <div id="total-display" style="text-align:right; font-size:1.5em; font-weight:bold; color:#28a745; margin:15px 0;">Total: $0.00</div>
-        <button class="btn-sell" onclick="window.processSale()">✅ COBRAR E IMPRIMIR</button>
-    </div>
+    <!-- Scripts de Firebase y Lógica -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    <div id="section-inv" style="display:none">
-        <label>Producto:</label>
-        <select id="sel-edit" onchange="window.loadEditData()">
-            <option value="">-- NUEVO PRODUCTO --</option>
-        </select>
-        <input type="text" id="edit-name" placeholder="Nombre">
-        <input type="number" id="edit-price" step="0.01" placeholder="Precio">
-        <input type="number" id="edit-stock" placeholder="Cantidad a Sumar">
-        <button class="btn-primary" onclick="window.saveProduct()">💾 Guardar / Rellenar</button>
-        <button id="btn-delete" class="btn-danger" style="display:none" onclick="window.deleteProduct()">🗑️ Borrar Producto</button>
-    </div>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDbNZ3Ie76U4D6_Q5qn9SYj6AnbFpGCgHE",
+            authDomain: "desechablesbasicossv.firebaseapp.com",
+            projectId: "desechablesbasicossv",
+            storageBucket: "desechablesbasicossv.firebasestorage.app",
+            messagingSenderId: "17410310479",
+            appId: "1:17410310479:web:323c25338b206ef2fcc53a",
+            measurementId: "G-ZDG17LZDHE"
+        };
 
-    <div id="section-his" style="display:none">
-        <div id="history-container"></div>
-    </div>
-</div>
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-<div id="ticket-printable"></div>
-
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, doc, addDoc, onSnapshot, updateDoc, deleteDoc, increment, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-        apiKey: "AIzaSyDJkqMNCPBQdkjQHBKyXyNLpBGIAlZ-4I4",
-        authDomain: "desechables-basicos.firebaseapp.com",
-        projectId: "desechables-basicos",
-        storageBucket: "desechables-basicos.firebasestorage.app",
-        messagingSenderId: "51919662981",
-        appId: "1:51919662981:web:4601365cc9fd0216911eec",
-        measurementId: "G-88S2Q8PZZW"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    let cart = [];
-    let products = [];
-    let history = [];
-
-    // Sincronización Realtime
-    onSnapshot(collection(db, "productos"), (snapshot) => {
-        products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        refreshSelectors();
-    });
-
-    onSnapshot(query(collection(db, "ventas"), orderBy("timestamp", "desc"), limit(25)), (snapshot) => {
-        history = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        if(document.getElementById('section-his').style.display === 'block') renderHistory();
-    });
-
-    window.switchTab = (tab) => {
-        document.getElementById('section-pos').style.display = tab === 'pos' ? 'block' : 'none';
-        document.getElementById('section-inv').style.display = tab === 'inv' ? 'block' : 'none';
-        document.getElementById('section-his').style.display = tab === 'his' ? 'block' : 'none';
-        document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.getAttribute('onclick').includes(tab)));
-        if(tab === 'his') renderHistory();
-    };
-
-    window.mostrarDisp = () => {
-        const idx = document.getElementById('sel-prod').value;
-        const info = document.getElementById('disp-actual');
-        if(idx !== "" && products[idx]) info.innerHTML = `Disponibles: ${products[idx].stock}`; else info.innerText = "";
-    };
-
-    window.addToCart = () => {
-        const idx = document.getElementById('sel-prod').value;
-        const qty = parseInt(document.getElementById('inp-qty').value);
-        if(idx === "" || qty <= 0 || qty > products[idx].stock) return alert("Error en stock");
-        cart.push({ dbId: products[idx].id, name: products[idx].name, price: products[idx].price, qty, total: products[idx].price * qty });
-        window.updateTotals();
-    };
-
-    window.updateTotals = () => {
-        const sub = cart.reduce((a, b) => a + b.total, 0);
-        const disc = parseFloat(document.getElementById('inp-disc').value) || 0;
-        document.getElementById('items-list').innerHTML = cart.map(it => `<div style="display:flex; justify-content:space-between; font-size:0.9em; margin-bottom:5px;"><span>${it.qty}x ${it.name}</span><span>$${it.total.toFixed(2)}</span></div>`).join('');
-        document.getElementById('total-display').innerText = "Total: $" + (sub - disc).toFixed(2);
-        buildTicket(sub, disc, new Date().toLocaleString(), cart);
-    };
-
-    window.processSale = async () => {
-        if(cart.length === 0) return;
-        const sub = cart.reduce((a, b) => a + b.total, 0);
-        const disc = parseFloat(document.getElementById('inp-disc').value) || 0;
-        const date = new Date().toLocaleString();
-
-        try {
-            await addDoc(collection(db, "ventas"), { date, timestamp: Date.now(), sub, disc, total: (sub - disc), items: cart });
-            for (const item of cart) {
-                await updateDoc(doc(db, "productos", item.dbId), { stock: increment(-item.qty) });
+        // Funciones globales accesibles en la interfaz
+        window.cambiarVista = function(vista) {
+            if(vista === 'catalogo') {
+                document.getElementById('vista-catalogo').classList.remove('hidden');
+                document.getElementById('vista-agente').classList.add('hidden');
+                document.getElementById('btn-catalogo').className = "flex items-center gap-3 px-4 py-2.5 rounded-lg bg-orange-600 text-white font-medium transition";
+                document.getElementById('btn-agente').className = "flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition";
+                document.getElementById('titulo-vista').innerText = "Catálogo de Productos";
+            } else {
+                document.getElementById('vista-catalogo').classList.add('hidden');
+                document.getElementById('vista-agente').classList.remove('hidden');
+                document.getElementById('btn-agente').className = "flex items-center gap-3 px-4 py-2.5 rounded-lg bg-orange-600 text-white font-medium transition";
+                document.getElementById('btn-catalogo').className = "flex items-center gap-3 px-4 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 transition";
+                document.getElementById('titulo-vista').innerText = "Agente Inteligente de Redes Sociales";
             }
-            const ticket = document.getElementById('ticket-printable');
-            ticket.style.display = 'block';
-            
-            // Guardar imagen PNG
-            const canvas = await html2canvas(ticket);
-            const link = document.createElement('a');
-            link.download = `Venta_${Date.now()}.png`;
-            link.href = canvas.toDataURL("image/png");
-            link.click();
-
-            window.print();
-            cart = [];
-            window.updateTotals();
-            ticket.style.display = 'none';
-        } catch (e) { alert("Error de conexión"); }
-    };
-
-    window.saveProduct = async () => {
-        const idx = document.getElementById('sel-edit').value;
-        const n = document.getElementById('edit-name').value;
-        const p = parseFloat(document.getElementById('edit-price').value);
-        const s = parseInt(document.getElementById('edit-stock').value) || 0;
-        if(!n) return;
-        try {
-            if(idx === "") await addDoc(collection(db, "productos"), { name: n, price: p, stock: s });
-            else await updateDoc(doc(db, "productos", products[idx].id), { name: n, price: p, stock: increment(s) });
-            alert("Listo");
-            resetInv();
-        } catch(e) { alert("Error al guardar"); }
-    };
-
-    window.deleteProduct = async () => {
-        const idx = document.getElementById('sel-edit').value;
-        if(idx !== "" && confirm("¿Borrar producto?")) {
-            await deleteDoc(doc(db, "productos", products[idx].id));
-            resetInv();
         }
-    };
 
-    window.loadEditData = () => {
-        const idx = document.getElementById('sel-edit').value;
-        if(idx !== "") {
-            document.getElementById('edit-name').value = products[idx].name;
-            document.getElementById('edit-price').value = products[idx].price;
-            document.getElementById('btn-delete').style.display = 'block';
-        } else resetInv();
-    };
+        window.guardarProducto = async function() {
+            const nombre = document.getElementById('nombre-prod').value;
+            const precio = document.getElementById('precio-prod').value;
+            if(!nombre) return alert('Por favor ingresa el nombre del producto');
 
-    function resetInv() {
-        document.getElementById('edit-name').value = "";
-        document.getElementById('edit-price').value = "";
-        document.getElementById('edit-stock').value = "";
-        document.getElementById('btn-delete').style.display = 'none';
-    }
+            try {
+                await addDoc(collection(db, "productos"), { nombre, precio, fecha: new Date() });
+                alert('¡Producto guardado correctamente en Firebase!');
+                document.getElementById('nombre-prod').value = '';
+                document.getElementById('precio-prod').value = '';
+                cargarProductos();
+            } catch (e) {
+                console.error("Error al guardar: ", e);
+            }
+        }
 
-    function refreshSelectors() {
-        const options = products.map((p, i) => `<option value="${i}">${p.name} (${p.stock})</option>`).join('');
-        document.getElementById('sel-prod').innerHTML = '<option value="">-- Seleccionar --</option>' + options;
-        document.getElementById('sel-edit').innerHTML = '<option value="">-- NUEVO PRODUCTO --</option>' + options;
-    }
+        async function cargarProductos() {
+            const contenedor = document.getElementById('lista-productos');
+            contenedor.innerHTML = '<p class="text-sm text-slate-400">Cargando...</p>';
+            try {
+                const querySnapshot = await getDocs(collection(db, "productos"));
+                contenedor.innerHTML = '';
+                querySnapshot.forEach((doc) => {
+                    const p = doc.data();
+                    contenedor.innerHTML += `
+                        <div class="border border-slate-100 p-4 rounded-lg bg-slate-50">
+                            <h4 class="font-bold text-slate-800">${p.nombre}</h4>
+                            <p class="text-sm text-orange-600 font-medium">${p.precio || 'Precio no especificado'}</p>
+                        </div>
+                    `;
+                });
+                if(querySnapshot.empty) {
+                    contenedor.innerHTML = '<p class="text-sm text-slate-400">No hay productos registrados todavía.</p>';
+                }
+            } catch (e) {
+                contenedor.innerHTML = '<p class="text-sm text-red-400">Error al cargar productos.</p>';
+            }
+        }
 
-    function buildTicket(sub, disc, date, itemsArray) {
-        const line = "--------------------------";
-        let itemsHtml = "";
-        itemsArray.forEach(it => {
-            itemsHtml += `${it.qty} ${it.name.substring(0,14).padEnd(15)} $${it.total.toFixed(2).padStart(6)}\n`;
-        });
-        document.getElementById('ticket-printable').innerText = `    DESECHABLES BASICOS\n      Pol. 23 Local 4\n${line}\nFECHA: ${date}\n${line}\n${itemsHtml}${line}\nTOTAL: $${(sub-disc).toFixed(2)}\n${line}\n  GRACIAS POR SU COMPRA`;
-    }
+        window.enviarMensajeAgente = function() {
+            const input = document.getElementById('input-chat');
+            const mensaje = input.value;
+            if(!mensaje) return;
 
-    function renderHistory() {
-        document.getElementById('history-container').innerHTML = history.map((h, i) => `
-            <div class="history-item">
-                <div><small>${h.date}</small><br><b>$${h.total.toFixed(2)}</b></div>
-                <button class="btn-reprint" onclick="window.reimprimirTicket(${i})">🖨️</button>
-            </div>`).join('');
-    }
+            const chat = document.getElementById('chat-mensajes');
+            chat.innerHTML += `
+                <div class="flex items-start justify-end gap-3">
+                    <div class="bg-orange-600 text-white p-4 rounded-xl max-w-lg text-sm">${mensaje}</div>
+                </div>
+            `;
+            input.value = '';
 
-    window.reimprimirTicket = (index) => {
-        const h = history[index];
-        buildTicket(h.sub, h.disc, h.date, h.items);
-        document.getElementById('ticket-printable').style.display = 'block';
-        setTimeout(() => { window.print(); document.getElementById('ticket-printable').style.display = 'none'; }, 500);
-    };
-</script>
+            // Respuesta simulada del agente pidiendo el diseño gráfico
+            setTimeout(() => {
+                chat.innerHTML += `
+                    <div class="flex items-start gap-3">
+                        <div class="bg-orange-600 text-white p-2 rounded-full"><i class="fa-solid fa-robot"></i></div>
+                        <div class="bg-slate-100 p-4 rounded-xl text-slate-800 max-w-lg text-sm">
+                            ¡Excelente elección! Para promocionar este artículo en <b>Facebook e Instagram</b> con alto impacto, necesito que me proporciones un diseño que cumpla con lo siguiente:<br><br>
+                            🎨 <b>Especificación del diseño:</b> Una imagen limpia donde se destaque el producto en uso (por ejemplo, en un evento o cafetería), con colores llamativos y un espacio libre en la esquina superior para colocar una etiqueta de oferta.<br><br>
+                            Sube o facilítame el diseño gráfico y yo me encargo de redactar el texto persuasivo y publicarlo.
+                        </div>
+                    </div>
+                `;
+                chat.scrollTop = chat.scrollHeight;
+            }, 1000);
+        }
+
+        // Cargar productos al iniciar
+        cargarProductos();
+    </script>
 </body>
 </html>
