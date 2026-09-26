@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desechables Básicos - Próximamente</title>
+    <title>Desechables Básicos - Catálogo & Inventario</title>
     
     <!-- ETIQUETAS OPEN GRAPH PARA MINIATURA EN WHATSAPP Y REDES -->
-    <meta property="og:title" content="Desechables Básicos | Próximamente">
-    <meta property="og:description" content="Vasos, bandejas, servilletas y aluminio al por mayor y detalle. ¡Muy pronto nuestra nueva plataforma digital!">
+    <meta property="og:title" content="Desechables Básicos | Catálogo Oficial">
+    <meta property="og:description" content="Vasos, bandejas, servilletas y aluminio al por mayor y detalle en Santa Ana Norte. ¡Visítanos!">
     <meta property="og:image" content="https://i.ibb.co/607Kv0Dd/Dise-o-sin-t-tulo-10.png">
     <meta property="og:url" content="https://desechablesbasicossv.github.io/">
     <meta property="og:type" content="website">
@@ -32,11 +32,11 @@
 <body class="bg-gray-100 font-sans flex flex-col min-h-screen">
 
     <!-- Barra Superior -->
-    <header class="bg-verdeOscuro text-white shadow-md border-b border-verdeMedio">
+    <header class="bg-verdeOscuro text-white shadow-md border-b border-verdeMedio sticky top-0 z-30">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="location.reload()">
                 <div class="bg-amarilloLogo text-verdeOscuro p-2 rounded-xl font-bold flex items-center justify-center shadow">
-                    <i class="fa-solid fa-rotate text-xl"></i>
+                    <i class="fa-solid fa-store text-xl"></i>
                 </div>
                 <div>
                     <h1 class="text-lg font-bold tracking-wide text-amarilloLogo">DESECHABLES BÁSICOS</h1>
@@ -45,32 +45,56 @@
             </div>
             <div class="flex items-center gap-4">
                 <button onclick="abrirAdminModal()" class="bg-amarilloLogo hover:bg-amarilloHover text-verdeOscuro font-bold px-4 py-2 rounded-lg text-sm transition flex items-center gap-2 shadow">
-                    <i class="fa-solid fa-lock"></i> Panel Admin & Inventario
+                    <i class="fa-solid fa-lock"></i> Panel Admin
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- BANNER DE EXPECTATIVA -->
-    <main class="container mx-auto px-4 py-12 flex-1 flex items-center justify-center">
-        <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-2xl w-full p-8 text-center space-y-6">
-            <div class="w-20 h-20 bg-verdeOscuro text-amarilloLogo rounded-full flex items-center justify-center mx-auto text-3xl shadow-lg animate-bounce">
-                <i class="fa-solid fa-store"></i>
-            </div>
-            <div class="space-y-2">
-                <span class="bg-amarilloLogo text-verdeOscuro text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider">Próximamente Nueva Experiencia</span>
-                <h2 class="text-3xl font-extrabold text-slate-800">Estamos trabajando para darte un mejor servicio</h2>
-                <p class="text-slate-600 text-sm max-w-lg mx-auto">
-                    Muy pronto lanzaremos nuestra nueva plataforma digital con catálogo renovado, control de stock en tiempo real y atención más rápida. ¡Gracias por tu preferencia!
-                </p>
-            </div>
+    <!-- CONTENEDOR PRINCIPAL: CAMBIA ENTRE EXPECTATIVA Y VISTA COMPLETA -->
+    <main class="container mx-auto px-4 py-8 flex-1">
 
-            <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row justify-center gap-4">
-                <a href="https://wa.me/50368483933?text=Hola,%20vengo%20de%20su%20página%20web%20y%20quiero%20hacer%20un%20pedido" target="_blank" class="bg-verdeOscuro hover:bg-verdeMedio text-amarilloLogo font-bold px-6 py-3 rounded-xl shadow transition flex items-center justify-center gap-2 text-sm">
-                    <i class="fa-brands fa-whatsapp text-lg"></i> Consultar por WhatsApp
-                </a>
+        <!-- 1. VISTA DE EXPECTATIVA (Se oculta si el admin desactiva el modo expectativa) -->
+        <div id="vista-expectativa" class="hidden flex items-center justify-center py-12">
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-2xl w-full p-8 text-center space-y-6">
+                <div class="w-20 h-20 bg-verdeOscuro text-amarilloLogo rounded-full flex items-center justify-center mx-auto text-3xl shadow-lg animate-bounce">
+                    <i class="fa-solid fa-store"></i>
+                </div>
+                <div class="space-y-2">
+                    <span class="bg-amarilloLogo text-verdeOscuro text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider">Próximamente Nueva Experiencia</span>
+                    <h2 class="text-3xl font-extrabold text-slate-800">Estamos trabajando para darte un mejor servicio</h2>
+                    <p class="text-slate-600 text-sm max-w-lg mx-auto">
+                        Muy pronto lanzaremos nuestra nueva plataforma digital con catálogo renovado, control de stock en tiempo real y atención más rápida. ¡Gracias por tu preferencia!
+                    </p>
+                </div>
+
+                <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="https://wa.me/50368483933?text=Hola,%20vengo%20de%20su%20página%20web%20y%20quiero%20hacer%20un%20pedido" target="_blank" class="bg-verdeOscuro hover:bg-verdeMedio text-amarilloLogo font-bold px-6 py-3 rounded-xl shadow transition flex items-center justify-center gap-2 text-sm">
+                        <i class="fa-brands fa-whatsapp text-lg"></i> Consultar por WhatsApp
+                    </a>
+                </div>
             </div>
         </div>
+
+        <!-- 2. VISTA DE LA PÁGINA TERMINADA Y CATÁLOGO (Visible por defecto) -->
+        <div id="vista-terminada" class="space-y-6">
+            <!-- Banner de bienvenida / Buscador -->
+            <div class="bg-gradient-to-r from-verdeOscuro to-verdeMedio rounded-2xl p-6 text-white shadow-lg flex flex-col md:flex-row justify-between items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-amarilloLogo">Catálogo de Productos</h2>
+                    <p class="text-xs text-gray-300 mt-1"><i class="fa-solid fa-location-dot text-amarilloLogo"></i> Urbanización Santa Ana Norte, Polígono 15 #7</p>
+                </div>
+                <div class="w-full md:w-72">
+                    <input type="text" id="buscador-tienda" placeholder="Buscar productos..." oninput="filtrarCatalogoPublico()" class="w-full px-4 py-2 rounded-xl text-slate-800 text-xs focus:outline-none shadow">
+                </div>
+            </div>
+
+            <!-- Listado dinámico del catálogo público -->
+            <div id="grid-catalogo-publico" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <p class="text-slate-500 text-center col-span-full py-12">Cargando productos disponibles...</p>
+            </div>
+        </div>
+
     </main>
 
     <!-- CHAT FLOTANTE DB BOT -->
@@ -132,7 +156,7 @@
             
             <div id="login-container">
                 <h3 class="text-xl font-bold text-slate-800 mb-2">Acceso Administrador</h3>
-                <p class="text-xs text-slate-500 mb-4">Ingresa la clave para gestionar inventario, editar, exportar a Excel y más.</p>
+                <p class="text-xs text-slate-500 mb-4">Ingresa la clave para gestionar inventario, modo de página e inventario.</p>
                 <input type="password" id="admin-pass" placeholder="Clave de acceso" class="w-full border rounded-lg px-4 py-2 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-verdeOscuro">
                 <button onclick="verificarAdmin()" class="w-full bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition">Ingresar</button>
             </div>
@@ -143,6 +167,17 @@
                     <span>Panel de Control & Inventario</span>
                     <span class="text-xs bg-amarilloLogo text-verdeOscuro px-2 py-1 rounded font-bold">Admin Activo</span>
                 </h3>
+
+                <!-- CONTROL MAESTRO DE MODO PÁGINA (EXPECTATIVA VS TERMINADA) -->
+                <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl flex items-center justify-between">
+                    <div>
+                        <h4 class="font-bold text-amber-900 text-xs">Estado de la Página Pública:</h4>
+                        <p class="text-[11px] text-amber-700">Activa o desactiva la vista de expectativa ("Próximamente").</p>
+                    </div>
+                    <button id="btn-toggle-expectativa" onclick="alternarModoExpectativa()" class="bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition shadow">
+                        Cargando estado...
+                    </button>
+                </div>
 
                 <!-- Pestañas del Panel -->
                 <div class="flex gap-2 border-b pb-2 overflow-x-auto">
@@ -260,7 +295,7 @@
     <!-- Scripts de Firebase y Lógica -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, setDoc, getDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDbNZ3Ie76U4D6_Q5qn9SYj6AnbFpGCgHE",
@@ -277,11 +312,131 @@
 
         let productosGlobales = [];
         let categoriasGlobales = [];
+        let modoExpectativaActivo = false;
 
+        // Carga inicial al abrir la página web
+        window.addEventListener('DOMContentLoaded', async () => {
+            await verificarModoExpectativaPublico();
+            await cargarCatalogoPublico();
+        });
+
+        async function verificarModoExpectativaPublico() {
+            try {
+                const configRef = doc(db, "configuracion", "sitio");
+                const configSnap = await getDoc(configRef);
+                const vistaExpectativa = document.getElementById('vista-expectativa');
+                const vistaTerminada = document.getElementById('vista-terminada');
+
+                if (configSnap.exists()) {
+                    modoExpectativaActivo = configSnap.data().expectativa || false;
+                }
+
+                if (modoExpectativaActivo) {
+                    if(vistaExpectativa) vistaExpectativa.classList.remove('hidden');
+                    if(vistaTerminada) vistaTerminada.classList.add('hidden');
+                } else {
+                    if(vistaExpectativa) vistaExpectativa.classList.add('hidden');
+                    if(vistaTerminada) vistaTerminada.classList.remove('hidden');
+                }
+            } catch(e) {
+                console.log("Usando vista predeterminada terminada");
+            }
+        }
+
+        async function cargarCatalogoPublico() {
+            const gridPublico = document.getElementById('grid-catalogo-publico');
+            if(!gridPublico) return;
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "productos"));
+                productosGlobales = [];
+                gridPublico.innerHTML = '';
+
+                if (querySnapshot.empty) {
+                    gridPublico.innerHTML = '<p class="text-slate-500 text-center col-span-full py-12">No hay productos disponibles en el catálogo todavía.</p>';
+                    return;
+                }
+
+                querySnapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    productosGlobales.push({ id: docSnap.id, ...data });
+                });
+
+                renderizarProductos(productosGlobales);
+            } catch(e) {
+                console.error("Error al cargar catálogo público", e);
+                gridPublico.innerHTML = '<p class="text-red-500 text-center col-span-full py-12">Error al conectar con la base de datos.</p>';
+            }
+        }
+
+        function renderizarProductos(lista) {
+            const gridPublico = document.getElementById('grid-catalogo-publico');
+            gridPublico.innerHTML = '';
+
+            lista.forEach(p => {
+                const precioNum = parseFloat(p.precio) || 0;
+                const imagenDefault = "https://i.ibb.co/MxWKPYZ1/vaso-81.jpg";
+                const img = p.imagen && p.imagen.trim() !== "" ? p.imagen : imagenDefault;
+
+                gridPublico.innerHTML += `
+                    <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden flex flex-col transition transform hover:-translate-y-1">
+                        <div class="h-40 bg-slate-100 overflow-hidden flex items-center justify-center">
+                            <img src="${img}" alt="${p.nombre}" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+                            <div>
+                                <span class="text-[10px] bg-amarilloLogo text-verdeOscuro px-2 py-0.5 rounded font-bold uppercase">${p.categoria || 'General'}</span>
+                                <h3 class="font-bold text-slate-800 text-base mt-1">${p.nombre}</h3>
+                                <p class="text-green-700 font-extrabold text-lg mt-1">$${precioNum.toFixed(2)}</p>
+                            </div>
+                            <a href="https://wa.me/50368483933?text=Hola,%20estoy%20interesado%20en%20el%20producto:%20${encodeURIComponent(p.nombre)}%20(Precio:%20$${precioNum.toFixed(2)})" target="_blank" class="w-full bg-verdeOsc0ro hover:bg-verdeMedio bg-[#132A13] text-amarilloLogo py-2 rounded-xl text-xs font-bold text-center transition flex items-center justify-center gap-2 shadow">
+                                <i class="fa-brands fa-whatsapp text-sm"></i> Pedir por WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        window.filtrarCatalogoPublico = function() {
+            const texto = document.getElementById('buscador-tienda').value.toLowerCase();
+            const filtrados = productosGlobales.filter(p => p.nombre.toLowerCase().includes(texto) || (p.categoria && p.categoria.toLowerCase().includes(texto)));
+            renderizarProductos(filtrados);
+        }
+
+        // Funciones del Administrador
         async function cargarDatosAdmin() {
             await cargarCategorias();
             await cargarCatalogoAdmin();
             await cargarProveedoresAdmin();
+            await actualizarBotonExpectativaAdmin();
+        }
+
+        async function actualizarBotonExpectativaAdmin() {
+            const btn = document.getElementById('btn-toggle-expectativa');
+            try {
+                const configRef = doc(db, "configuracion", "sitio");
+                const configSnap = await getDoc(configRef);
+                if (configSnap.exists()) {
+                    modoExpectativaActivo = configSnap.data().expectativa || false;
+                }
+                if(btn) {
+                    btn.innerText = modoExpectativaActivo ? "⚠️ Desactivar Expectativa (Mostrar Tienda)" : "✅ Activar Vista Expectativa (Próximamente)";
+                }
+            } catch(e) { console.log(e); }
+        }
+
+        window.alternarModoExpectativa = async function() {
+            try {
+                modoExpectativaActivo = !modoExpectativaActivo;
+                const configRef = doc(db, "configuracion", "sitio");
+                await setDoc(configRef, { expectativa: modoExpectativaActivo });
+                await actualizarBotonExpectativaAdmin();
+                await verificarModoExpectativaPublico();
+                alert(`✅ El modo de la página ha cambiado correctamente.`);
+            } catch(e) {
+                alert('❌ Error al cambiar el modo de la página.');
+            }
         }
 
         async function cargarCategorias() {
@@ -388,6 +543,7 @@
                 if(labelInversion) {
                     labelInversion.innerText = `Inversión Total: $${inversionTotalGeneral.toFixed(2)}`;
                 }
+                renderizarProductos(productosGlobales);
             } catch (e) {
                 console.error("Error al cargar productos", e);
             }
