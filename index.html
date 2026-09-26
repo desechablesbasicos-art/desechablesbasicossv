@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Desechables Básicos - Próximamente</title>
+    
+    <!-- ETIQUETAS PARA MINIATURA EN WHATSAPP Y REDES SOCIALES -->
+    <meta property="og:title" content="Desechables Básicos | Vasos, Bandejas y Servilletas">
+    <meta property="og:description" content="Encuentra los mejores productos plásticos y de limpieza al por mayor y detalle en Santa Ana Norte.">
+    <meta property="og:image" content="https://i.ibb.co/MxWKPYZ1/vaso-81.jpg">
+    <meta property="og:url" content="https://desechablesbasicossv.github.io/">
+    <meta property="og:type" content="website">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -385,14 +393,13 @@
             }
         }
 
-        // EXPORTAR A EXCEL (CSV Formateado profesional)
         window.exportarExcel = function() {
             if(productosGlobales.length === 0) {
                 alert('⚠️ No hay productos en el inventario para exportar.');
                 return;
             }
 
-            let csvContent = "\uFEFF"; // BOM para correcta codificación de tildes en Excel
+            let csvContent = "\uFEFF";
             csvContent += "Producto,Categoría,Precio Unitario ($),Stock Actual,Inversión Total ($)\n";
 
             let inversionTotal = 0;
@@ -419,7 +426,6 @@
             document.body.removeChild(link);
         }
 
-        // Chat DB Bot
         let chatIniciado = false;
         window.toggleChat = function() {
             const ventana = document.getElementById('ventana-chat');
@@ -476,7 +482,6 @@
             } else { alert('Clave incorrecta'); }
         }
 
-        // GUARDAR O EDITAR CATEGORÍA
         window.guardarCategoria = async function() {
             const catId = document.getElementById('edit-cat-id').value;
             const catInput = document.getElementById('nueva-categoria-input').value.trim();
@@ -524,7 +529,6 @@
             }
         }
 
-        // GUARDAR O EDITAR PRODUCTO
         window.guardarNuevoProducto = async function() {
             const prodId = document.getElementById('edit-prod-id').value;
             const nombreInput = document.getElementById('nuevo-nombre').value.trim();
@@ -611,7 +615,6 @@
             }
         }
 
-        // Registrar Entradas y Salidas
         window.registrarMovimiento = async function() {
             const prodId = document.getElementById('mov-producto').value;
             const tipo = document.getElementById('mov-tipo').value;
@@ -639,7 +642,6 @@
             }
         }
 
-        // Proveedores
         window.guardarProveedor = async function() {
             const nombre = document.getElementById('prov-nombre').value;
             const contacto = document.getElementById('prov-contacto').value;
