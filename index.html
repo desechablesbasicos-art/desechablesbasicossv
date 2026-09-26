@@ -3,489 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desechables Básicos - Catálogo y Tienda</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        verdeOscuro: '#132A13',
-                        verdeMedio: '#1B3B1B',
-                        amarilloLogo: '#F4D03F',
-                        amarilloHover: '#E5C138'
-                    }
-                }
-            }
+    <title>Desechables Básicos | Próximamente</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-    </script>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: #ffffff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .badge {
+            background-color: #f59e0b;
+            color: #0f172a;
+            padding: 6px 16px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #f8fafc;
+        }
+        p {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .footer-text {
+            font-size: 0.9rem;
+            color: #64748b;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 font-sans flex flex-col min-h-screen">
+<body>
 
-    <!-- Barra Superior -->
-    <header class="bg-verdeOscuro text-white shadow-md border-b border-verdeMedio">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="bg-amarilloLogo text-verdeOscuro p-2 rounded-xl font-bold flex items-center justify-center shadow">
-                    <i class="fa-solid fa-rotate text-xl"></i>
-                </div>
-                <div>
-                    <h1 class="text-lg font-bold tracking-wide text-amarilloLogo">DESECHABLES BÁSICOS</h1>
-                    <p class="text-xs text-gray-300">Vasos, bandejas, servilletas y aluminio</p>
-                </div>
-            </div>
-            <div class="flex items-center gap-4">
-                <button onclick="abrirAdminModal()" class="bg-amarilloLogo hover:bg-amarilloHover text-verdeOscuro font-bold px-4 py-2 rounded-lg text-sm transition flex items-center gap-2 shadow">
-                    <i class="fa-solid fa-lock"></i> Panel Admin & Inventario
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Barra de Búsqueda y Categorías -->
-    <div class="bg-white shadow-sm border-b">
-        <div class="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0">
-                <button onclick="filtrarCategoria('todos')" class="bg-verdeOscuro text-white px-4 py-1.5 rounded-full text-sm whitespace-nowrap font-medium">Todo</button>
-                <button onclick="filtrarCategoria('Vasos de Foam')" class="bg-gray-100 hover:bg-gray-200 text-slate-800 px-4 py-1.5 rounded-full text-sm whitespace-nowrap">Vasos de Foam</button>
-                <button onclick="filtrarCategoria('Bandejas')" class="bg-gray-100 hover:bg-gray-200 text-slate-800 px-4 py-1.5 rounded-full text-sm whitespace-nowrap">Bandejas y Aluminio</button>
-                <button onclick="filtrarCategoria('Servilletas')" class="bg-gray-100 hover:bg-gray-200 text-slate-800 px-4 py-1.5 rounded-full text-sm whitespace-nowrap">Servilletas</button>
-            </div>
-            <div class="w-full md:w-72">
-                <input type="text" id="buscador" onkeyup="buscarProductos()" placeholder="Buscar productos..." class="w-full border rounded-lg px-4 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-verdeOscuro">
-            </div>
+    <div class="container">
+        <div class="badge">Próximamente</div>
+        <h1>Algo increíble se está gestando</h1>
+        <p>Estamos construyendo una nueva experiencia digital para facilitarte tus compras en <strong>Desechables Básicos</strong>. Pronto abriremos las puertas de nuestra nueva plataforma con todos los productos listos para ti en Santa Ana Norte.</p>
+        <div class="footer-text">
+            © Desechables Básicos • Todos los derechos reservados.
         </div>
     </div>
 
-    <!-- Contenido Principal: Vitrina de Productos -->
-    <main class="container mx-auto px-4 py-8 flex-1">
-        <h2 class="text-2xl font-bold text-slate-800 mb-6 border-l-4 border-amarilloLogo pl-3">Nuestros Productos Destacados</h2>
-        
-        <div id="grid-productos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <div class="col-span-full text-center py-12 text-slate-400">
-                <i class="fa-solid fa-spinner fa-spin text-2xl mb-2 text-verdeOscuro"></i>
-                <p>Cargando catálogo desde Firebase...</p>
-            </div>
-        </div>
-    </main>
-
-    <!-- CHAT FLOTANTE DB BOT -->
-    <div id="widget-bot" class="fixed bottom-6 right-6 z-40">
-        <button onclick="toggleChat()" id="btn-abrir-chat" class="bg-verdeOscuro hover:bg-verdeMedio text-amarilloLogo p-4 rounded-full shadow-2xl flex items-center justify-center text-xl transition transform hover:scale-105">
-            <i class="fa-solid fa-comments"></i>
-        </button>
-
-        <div id="ventana-chat" class="hidden bg-white w-80 sm:w-96 rounded-2xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden">
-            <div class="bg-verdeOscuro text-white p-4 flex justify-between items-center">
-                <div class="flex items-center gap-2">
-                    <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                    <span class="font-bold text-sm text-amarilloLogo">DB Bot - Asistente Virtual</span>
-                </div>
-                <button onclick="toggleChat()" class="text-slate-300 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            
-            <div id="chat-mensajes-bot" class="p-4 h-72 overflow-y-auto space-y-3 bg-slate-50 text-xs text-slate-700"></div>
-
-            <div class="p-3 bg-white border-t flex gap-2">
-                <input type="text" id="input-chat-bot" placeholder="Escribe tu respuesta u opción..." onkeypress="manejarEnter(event)" class="flex-1 border rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-verdeOscuro">
-                <button onclick="enviarMensajeBot()" class="bg-verdeOscuro text-amarilloLogo px-4 py-2 rounded-lg text-xs font-bold hover:bg-verdeMedio">Enviar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- PIE DE PÁGINA -->
-    <footer class="bg-verdeOscuro text-white border-t border-verdeMedio mt-12 py-8">
-        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-            <div>
-                <h3 class="text-amarilloLogo font-bold text-lg mb-2">DESECHABLES BÁSICOS</h3>
-                <p class="text-xs text-gray-300 mb-1"><i class="fa-solid fa-location-dot text-amarilloLogo"></i> Urbanización Santa Ana Norte, Polígono 15 #7</p>
-                <p class="text-xs text-gray-300"><i class="fa-solid fa-phone text-amarilloLogo"></i> Pedidos y WhatsApp: 6848-3933</p>
-            </div>
-            
-            <div class="flex flex-col items-center justify-center">
-                <span class="text-xs text-amarilloLogo font-bold mb-2 uppercase tracking-wider">Síguenos en Redes</span>
-                <div class="flex gap-4">
-                    <a href="https://www.facebook.com/Basicplastic" target="_blank" class="bg-verdeMedio hover:bg-amarilloLogo hover:text-verdeOscuro text-white w-10 h-10 rounded-full flex items-center justify-center transition shadow text-lg"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="https://www.instagram.com/desechablesbasicossv/" target="_blank" class="bg-verdeMedio hover:bg-amarilloLogo hover:text-verdeOscuro text-white w-10 h-10 rounded-full flex items-center justify-center transition shadow text-lg"><i class="fa-brands fa-instagram"></i></a>
-                </div>
-            </div>
-
-            <div class="flex md:justify-end">
-                <a href="https://wa.me/50368483933?text=Hola,%20vengo%20de%20su%20página%20web%20y%20quiero%20hacer%20un%20pedido" target="_blank" class="bg-amarilloLogo hover:bg-amarilloHover text-verdeOscuro font-bold px-6 py-3 rounded-xl shadow transition flex items-center gap-2 text-sm">
-                    <i class="fa-brands fa-whatsapp text-lg"></i> Chatear por WhatsApp
-                </a>
-            </div>
-        </div>
-        <div class="container mx-auto px-4 mt-6 pt-4 border-t border-verdeMedio text-center text-xs text-gray-400">
-            &copy; 2026 Desechables Básicos. Todos los derechos reservados.
-        </div>
-    </footer>
-
-    <!-- MODAL PANEL ADMIN E INVENTARIO -->
-    <div id="modal-admin" class="fixed inset-0 bg-black/60 hidden flex justify-center items-center z-50 p-4">
-        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full p-6 relative max-h-[90vh] overflow-y-auto">
-            <button onclick="cerrarAdminModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
-            
-            <div id="login-container">
-                <h3 class="text-xl font-bold text-slate-800 mb-2">Acceso Administrador</h3>
-                <p class="text-xs text-slate-500 mb-4">Ingresa la clave para gestionar el inventario, entradas, salidas y proveedores.</p>
-                <input type="password" id="admin-pass" placeholder="Clave de acceso" class="w-full border rounded-lg px-4 py-2 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-verdeOscuro">
-                <button onclick="verificarAdmin()" class="w-full bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition">Ingresar</button>
-            </div>
-
-            <!-- Panel de Administración e Inventario -->
-            <div id="dashboard-container" class="hidden space-y-6">
-                <h3 class="text-xl font-bold text-slate-800 border-b pb-2 flex items-center justify-between">
-                    <span>Panel de Control & Inventario</span>
-                    <span class="text-xs bg-amarilloLogo text-verdeOscuro px-2 py-1 rounded font-bold">Admin Activo</span>
-                </h3>
-
-                <!-- Pestañas del Panel -->
-                <div class="flex gap-2 border-b pb-2">
-                    <button onclick="cambiarTabAdmin('productos')" id="tab-btn-productos" class="bg-verdeOscuro text-amarilloLogo px-3 py-1.5 rounded-lg text-xs font-bold">Productos & Stock</button>
-                    <button onclick="cambiarTabAdmin('movimientos')" id="tab-btn-movimientos" class="bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold">Entradas / Salidas</button>
-                    <button onclick="cambiarTabAdmin('proveedores')" id="tab-btn-proveedores" class="bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold">Proveedores</button>
-                    <button onclick="cambiarTabAdmin('agente')" id="tab-btn-agente" class="bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold">Agente Meta</button>
-                </div>
-                
-                <!-- SECCIÓN 1: PRODUCTOS Y STOCK -->
-                <div id="tab-productos" class="space-y-4">
-                    <div class="bg-slate-50 p-4 rounded-xl border space-y-2">
-                        <h4 class="font-bold text-slate-700 text-sm">Registrar Nuevo Producto / Stock Inicial</h4>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            <input type="text" id="nuevo-nombre" placeholder="Nombre (Ej. Vaso Foam 8oz)" class="border rounded-lg px-3 py-2 text-sm">
-                            <input type="text" id="nuevo-precio" placeholder="Precio (Ej. $12.50 el ciento)" class="border rounded-lg px-3 py-2 text-sm">
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            <select id="nuevo-categoria" class="border rounded-lg px-3 py-2 text-sm bg-white">
-                                <option value="Vasos de Foam">Vasos de Foam</option>
-                                <option value="Bandejas">Bandejas y Aluminio</option>
-                                <option value="Servilletas">Servilletas</option>
-                            </select>
-                            <input type="number" id="nuevo-stock" placeholder="Stock inicial (Ej. 100)" class="border rounded-lg px-3 py-2 text-sm">
-                        </div>
-                        <input type="text" id="nuevo-imagen" placeholder="URL de imagen (opcional)" class="w-full border rounded-lg px-3 py-2 text-sm">
-                        <button onclick="guardarNuevoProducto()" class="w-full bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition text-sm">Guardar en Inventario</button>
-                    </div>
-                    
-                    <div class="bg-white p-3 rounded-xl border max-h-48 overflow-y-auto">
-                        <h4 class="font-bold text-slate-700 text-xs mb-2">Inventario Actual en Firebase:</h4>
-                        <div id="lista-stock-admin" class="space-y-1 text-xs"></div>
-                    </div>
-                </div>
-
-                <!-- SECCIÓN 2: ENTRADAS Y SALIDAS -->
-                <div id="tab-movimientos" class="hidden space-y-4">
-                    <div class="bg-slate-50 p-4 rounded-xl border space-y-3">
-                        <h4 class="font-bold text-slate-700 text-sm">Registrar Entrada (Compra) o Salida (Venta Física)</h4>
-                        <select id="mov-producto" class="w-full border rounded-lg px-3 py-2 text-sm bg-white"></select>
-                        <div class="grid grid-cols-2 gap-2">
-                            <select id="mov-tipo" class="border rounded-lg px-3 py-2 text-sm bg-white">
-                                <option value="entrada">Entrada (Compra a Proveedor)</option>
-                                <option value="salida">Salida (Venta Física Local)</option>
-                            </select>
-                            <input type="number" id="mov-cantidad" placeholder="Cantidad" class="border rounded-lg px-3 py-2 text-sm">
-                        </div>
-                        <input type="text" id="mov-detalle" placeholder="Motivo / Proveedor / Cliente" class="w-full border rounded-lg px-3 py-2 text-sm">
-                        <button onclick="registrarMovimiento()" class="w-full bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition text-sm">Actualizar Stock</button>
-                    </div>
-                </div>
-
-                <!-- SECCIÓN 3: PROVEEDORES -->
-                <div id="tab-proveedores" class="hidden space-y-4">
-                    <div class="bg-slate-50 p-4 rounded-xl border space-y-3">
-                        <h4 class="font-bold text-slate-700 text-sm">Registrar Proveedor</h4>
-                        <input type="text" id="prov-nombre" placeholder="Nombre de empresa o proveedor" class="w-full border rounded-lg px-3 py-2 text-sm">
-                        <input type="text" id="prov-contacto" placeholder="Teléfono o persona de contacto" class="w-full border rounded-lg px-3 py-2 text-sm">
-                        <input type="text" id="prov-producto" placeholder="¿Qué productos provee?" class="w-full border rounded-lg px-3 py-2 text-sm">
-                        <button onclick="guardarProveedor()" class="w-full bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition text-sm">Guardar Proveedor</button>
-                    </div>
-                    <div id="lista-proveedores-admin" class="space-y-2 max-h-40 overflow-y-auto text-xs"></div>
-                </div>
-
-                <!-- SECCIÓN 4: AGENTE META -->
-                <div id="tab-agente" class="hidden space-y-4">
-                    <div class="bg-slate-50 p-4 rounded-xl border">
-                        <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2 mb-2">
-                            <i class="fa-solid fa-robot text-verdeOscuro"></i> Agente Creativo para Meta
-                        </h4>
-                        <p class="text-xs text-slate-500 mb-3">Escribe el producto u oferta que quieres lanzar hoy:</p>
-                        <div class="flex gap-2">
-                            <input type="text" id="input-agente-admin" placeholder="Ej. Vasos de foam para cafeterías" class="flex-1 border rounded-lg px-3 py-2 text-xs">
-                            <button onclick="consultarAgente()" class="bg-verdeOscuro text-amarilloLogo px-4 py-2 rounded-lg text-xs font-bold hover:bg-verdeMedio">Generar</button>
-                        </div>
-                        <div id="respuesta-agente" class="mt-4 bg-white p-4 rounded-lg text-xs text-slate-700 hidden border shadow-sm space-y-3"></div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- Scripts de Firebase y Lógica -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDbNZ3Ie76U4D6_Q5qn9SYj6AnbFpGCgHE",
-            authDomain: "desechablesbasicossv.firebaseapp.com",
-            projectId: "desechablesbasicossv",
-            storageBucket: "desechablesbasicossv.firebasestorage.app",
-            messagingSenderId: "17410310479",
-            appId: "1:17410310479:web:323c25338b206ef2fcc53a",
-            measurementId: "G-ZDG17LZDHE"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        let productosGlobales = [];
-
-        async function cargarCatalogo() {
-            const grid = document.getElementById('grid-productos');
-            const listaStock = document.getElementById('lista-stock-admin');
-            const selectMov = document.getElementById('mov-producto');
-            
-            try {
-                const querySnapshot = await getDocs(collection(db, "productos"));
-                productosGlobales = [];
-                if(listaStock) listaStock.innerHTML = '';
-                if(selectMov) selectMov.innerHTML = '';
-
-                querySnapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
-                    productosGlobales.push({ id: docSnap.id, ...data });
-                    
-                    if(listaStock) {
-                        listaStock.innerHTML += `<div class="flex justify-between border-b py-1"><span><b>${data.nombre}</b></span> <span class="bg-verdeOscuro text-amarilloLogo px-2 rounded font-bold">Stock: ${data.stock || 0}</span></div>`;
-                    }
-                    if(selectMov) {
-                        selectMov.innerHTML += `<option value="${docSnap.id}">${data.nombre} (Stock actual: ${data.stock || 0})</option>`;
-                    }
-                });
-                renderizarProductos(productosGlobales);
-            } catch (e) {
-                grid.innerHTML = '<p class="col-span-full text-center text-red-500">Error al cargar el catálogo de Firebase.</p>';
-            }
-        }
-
-        function renderizarProductos(productos) {
-            const grid = document.getElementById('grid-productos');
-            grid.innerHTML = '';
-            
-            if(productos.length === 0) {
-                grid.innerHTML = '<p class="col-span-full text-center text-slate-400 py-12">No hay productos disponibles. Entra al Panel Admin para agregarlos.</p>';
-                return;
-            }
-
-            productos.forEach(p => {
-                const imagenDefault = p.imagen || 'https://images.unsplash.com/photo-1546554137-f86b9593a222?auto=format&fit=crop&q=80&w=400';
-                grid.innerHTML += `
-                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition flex flex-col justify-between">
-                        <div>
-                            <div class="h-48 bg-slate-100 overflow-hidden relative">
-                                <img src="${imagenDefault}" alt="${p.nombre}" class="w-full h-full object-cover">
-                                <span class="absolute top-2 left-2 bg-verdeOscuro text-amarilloLogo text-xs px-2.5 py-1 rounded-md font-bold shadow">${p.categoria || 'Desechables'}</span>
-                                <span class="absolute top-2 right-2 bg-white text-slate-800 text-xs px-2 py-1 rounded-md font-bold shadow">Stock: ${p.stock || 0}</span>
-                            </div>
-                            <div class="p-4">
-                                <h3 class="font-bold text-slate-800 text-lg mb-1">${p.nombre}</h3>
-                                <p class="text-verdeOscuro font-extrabold text-lg">${p.precio || 'Consultar precio'}</p>
-                            </div>
-                        </div>
-                        <div class="p-4 pt-0">
-                            <a href="https://wa.me/50368483933?text=Hola,%20estoy%20interesado%20en%20el%20producto:%20${encodeURIComponent(p.nombre)}" target="_blank" class="w-full bg-verdeOscuro hover:bg-verdeMedio text-amarilloLogo py-2 rounded-lg text-sm font-bold transition block text-center shadow">
-                                <i class="fa-brands fa-whatsapp"></i> Consultar Pedido
-                            </a>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        window.filtrarCategoria = function(cat) {
-            if(cat === 'todos') {
-                renderizarProductos(productosGlobales);
-            } else {
-                renderizarProductos(productosGlobales.filter(p => p.categoria === cat));
-            }
-        }
-
-        window.buscarProductos = function() {
-            const texto = document.getElementById('buscador').value.toLowerCase();
-            renderizarProductos(productosGlobales.filter(p => p.nombre.toLowerCase().includes(texto)));
-        }
-
-        // Chat DB Bot
-        let chatIniciado = false;
-        window.toggleChat = function() {
-            const ventana = document.getElementById('ventana-chat');
-            ventana.classList.toggle('hidden');
-            if(!chatIniciado && !ventana.classList.contains('hidden')) {
-                chatIniciado = true;
-                document.getElementById('chat-mensajes-bot').innerHTML = `
-                    <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-100">
-                        <b>DB Bot:</b> Hola, soy DB Bot en qué podemos ayudarte si tienes el pedido dilo sino oprime <b>1</b> para estar con nuestro personal.
-                    </div>
-                `;
-            }
-        }
-
-        window.manejarEnter = function(e) { if(e.key === 'Enter') enviarMensajeBot(); }
-
-        window.enviarMensajeBot = function() {
-            const input = document.getElementById('input-chat-bot');
-            const texto = input.value.trim();
-            if(!texto) return;
-            const contenedor = document.getElementById('chat-mensajes-bot');
-            
-            contenedor.innerHTML += `<div class="text-right"><span class="inline-block bg-verdeOscuro text-amarilloLogo px-3 py-1.5 rounded-lg">${texto}</span></div>`;
-            input.value = '';
-            contenedor.scrollTop = contenedor.scrollHeight;
-
-            setTimeout(() => {
-                let respuesta = texto === "1" ? "Gracias por contactarnos. Te estamos comunicando con nuestro personal por WhatsApp." : `Hemos registrado tu comentario: "${texto}". Si deseas confirmar este pedido o hablar con alguien, presiona <b>1</b> o escríbenos al 6848-3933.`;
-                contenedor.innerHTML += `<div class="bg-white p-3 rounded-xl shadow-sm border border-slate-100"><b>DB Bot:</b> ${respuesta}</div>`;
-                contenedor.scrollTop = contenedor.scrollHeight;
-                if(texto === "1") {
-                    setTimeout(() => window.open("https://wa.me/50368483933?text=Hola,%20presioné%201%20en%20el%20bot%20de%20la%20web", "_blank"), 1500);
-                }
-            }, 600);
-        }
-
-        // Navegación Panel Admin
-        window.cambiarTabAdmin = function(tab) {
-            ['productos', 'movimientos', 'proveedores', 'agente'].forEach(t => {
-                document.getElementById(`tab-${t}`).classList.add('hidden');
-                document.getElementById(`tab-btn-${t}`).className = "bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold";
-            });
-            document.getElementById(`tab-${tab}`).classList.remove('hidden');
-            document.getElementById(`tab-btn-${tab}`).className = "bg-verdeOscuro text-amarilloLogo px-3 py-1.5 rounded-lg text-xs font-bold";
-        }
-
-        window.abrirAdminModal = function() { document.getElementById('modal-admin').classList.remove('hidden'); }
-        window.cerrarAdminModal = function() { document.getElementById('modal-admin').classList.add('hidden'); }
-
-        window.verificarAdmin = function() {
-            if(document.getElementById('admin-pass').value === 'Desechables1982') {
-                document.getElementById('login-container').classList.add('hidden');
-                document.getElementById('dashboard-container').classList.remove('hidden');
-                cargarProveedoresAdmin();
-            } else { alert('Clave incorrecta'); }
-        }
-
-        // Guardar Nuevo Producto
-        window.guardarNuevoProducto = async function() {
-            const nombre = document.getElementById('nuevo-nombre').value;
-            const precio = document.getElementById('nuevo-precio').value;
-            const categoria = document.getElementById('nuevo-categoria').value;
-            const stock = parseInt(document.getElementById('nuevo-stock').value) || 0;
-            const imagen = document.getElementById('nuevo-imagen').value;
-
-            if(!nombre || !precio) return alert('Completa al menos el nombre y el precio.');
-
-            try {
-                await addDoc(collection(db, "productos"), { nombre, precio, categoria, stock, imagen, fecha: new Date() });
-                alert('¡Producto y stock guardados con éxito!');
-                document.getElementById('nuevo-nombre').value = '';
-                document.getElementById('nuevo-precio').value = '';
-                document.getElementById('nuevo-stock').value = '';
-                document.getElementById('nuevo-imagen').value = '';
-                cargarCatalogo();
-            } catch(e) { alert('Error al guardar en Firebase'); }
-        }
-
-        // Registrar Entradas y Salidas
-        window.registrarMovimiento = async function() {
-            const prodId = document.getElementById('mov-producto').value;
-            const tipo = document.getElementById('mov-tipo').value;
-            const cantidad = parseInt(document.getElementById('mov-cantidad').value) || 0;
-            const detalle = document.getElementById('mov-detalle').value;
-
-            if(cantidad <= 0) return alert('Ingresa una cantidad válida.');
-
-            try {
-                const prodRef = doc(db, "productos", prodId);
-                const ajuste = tipo === 'entrada' ? cantidad : -cantidad;
-                
-                await updateDoc(prodRef, { stock: increment(ajuste) });
-                await addDoc(collection(db, "movimientos"), { productoId: prodId, tipo, cantidad, detalle, fecha: new Date() });
-
-                alert(`¡Stock actualizado con éxito! (${tipo === 'entrada' ? '+' : '-'}${cantidad})`);
-                document.getElementById('mov-cantidad').value = '';
-                document.getElementById('mov-detalle').value = '';
-                cargarCatalogo();
-            } catch(e) { alert('Error al registrar movimiento'); }
-        }
-
-        // Proveedores
-        window.guardarProveedor = async function() {
-            const nombre = document.getElementById('prov-nombre').value;
-            const contacto = document.getElementById('prov-contacto').value;
-            const producto = document.getElementById('prov-producto').value;
-
-            if(!nombre) return alert('Ingresa el nombre del proveedor.');
-
-            try {
-                await addDoc(collection(db, "proveedores"), { nombre, contacto, producto, fecha: new Date() });
-                alert('¡Proveedor registrado!');
-                document.getElementById('prov-nombre').value = '';
-                document.getElementById('prov-contacto').value = '';
-                document.getElementById('prov-producto').value = '';
-                cargarProveedoresAdmin();
-            } catch(e) { alert('Error al guardar proveedor'); }
-        }
-
-        async function cargarProveedoresAdmin() {
-            const contenedor = document.getElementById('lista-proveedores-admin');
-            if(!contenedor) return;
-            try {
-                const querySnapshot = await getDocs(collection(db, "proveedores"));
-                contenedor.innerHTML = '<h4 class="font-bold text-slate-700 text-xs mb-1">Proveedores Registrados:</h4>';
-                querySnapshot.forEach(docSnap => {
-                    const p = docSnap.data();
-                    contenedor.innerHTML += `<div class="border-b py-1"><b>${p.nombre}</b> - Tel: ${p.contacto || 'N/A'} (Suministra: ${p.producto || 'N/A'})</div>`;
-                });
-            } catch(e) { console.log(e); }
-        }
-
-        window.consultarAgente = function() {
-            const texto = document.getElementById('input-agente-admin').value;
-            const caja = document.getElementById('respuesta-agente');
-            if(!texto) return;
-
-            caja.classList.remove('hidden');
-            caja.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> El agente está diseñando tu estrategia para Facebook e Instagram...';
-
-            setTimeout(() => {
-                const copyGenerado = `¡Abastece tu negocio o evento al mejor precio! 📦🥤\n\nEn **Desechables Básicos** tenemos disponible:\n👉 ${texto}\n\nCalidad garantizada, resistencia y los mejores precios por mayor y detalle.\n\n📲 ¡Escríbenos al 6848-3933 o visítanos en Urbanización Santa Ana Norte, Polígono 15 #7!\n\n#DesechablesBasicos #VasosDeFoam #BandejasDeAluminio #ElSalvador`;
-                
-                caja.innerHTML = `
-                    <div>
-                        <strong class="text-verdeOscuro">🎨 Especificación de Diseño Visual:</strong>
-                        <p class="text-gray-600 mt-1 mb-3">Diseña una imagen limpia del producto ${texto} con los colores verde y amarillo y la dirección de Santa Ana Norte.</p>
-                        
-                        <strong class="text-verdeOscuro">✍️ Copy para Meta:</strong>
-                        <textarea id="texto-copy" class="w-full h-28 border p-2 rounded mt-1 text-xs bg-gray-50">${copyGenerado}</textarea>
-                        
-                        <button onclick="copiarTexto()" class="mt-2 bg-verdeOscuro text-amarilloLogo px-3 py-1.5 rounded font-bold text-xs hover:bg-verdeMedio transition">
-                            <i class="fa-solid fa-copy"></i> Copiar Copy
-                        </button>
-                    </div>
-                `;
-            }, 1000);
-        }
-
-        window.copiarTexto = function() {
-            const textarea = document.getElementById('texto-copy');
-            textarea.select();
-            document.execCommand('copy');
-            alert('¡Copy copiado al portapapeles!');
-        }
-
-        cargarCatalogo();
-    </script>
 </body>
 </html>
