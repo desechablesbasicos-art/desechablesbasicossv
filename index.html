@@ -124,7 +124,7 @@
             
             <div id="login-container">
                 <h3 class="text-xl font-bold text-slate-800 mb-2">Acceso Administrador</h3>
-                <p class="text-xs text-slate-500 mb-4">Ingresa la clave para gestionar el inventario, entradas, salidas y proveedores.</p>
+                <p class="text-xs text-slate-500 mb-4">Ingresa la clave para gestionar el inventario, entradas, salidas, categorías y proveedores.</p>
                 <input type="password" id="admin-pass" placeholder="Clave de acceso" class="w-full border rounded-lg px-4 py-2 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-verdeOscuro">
                 <button onclick="verificarAdmin()" class="w-full bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition">Ingresar</button>
             </div>
@@ -137,11 +137,12 @@
                 </h3>
 
                 <!-- Pestañas del Panel -->
-                <div class="flex gap-2 border-b pb-2">
-                    <button onclick="cambiarTabAdmin('productos')" id="tab-btn-productos" class="bg-verdeOscuro text-amarilloLogo px-3 py-1.5 rounded-lg text-xs font-bold">Productos & Stock</button>
-                    <button onclick="cambiarTabAdmin('movimientos')" id="tab-btn-movimientos" class="bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold">Entradas / Salidas</button>
-                    <button onclick="cambiarTabAdmin('proveedores')" id="tab-btn-proveedores" class="bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold">Proveedores</button>
-                    <button onclick="cambiarTabAdmin('agente')" id="tab-btn-agente" class="bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold">Agente Meta</button>
+                <div class="flex gap-2 border-b pb-2 overflow-x-auto">
+                    <button onclick="cambiarTabAdmin('productos')" id="tab-btn-productos" class="bg-verdeOscuro text-amarilloLogo px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap">Productos & Stock</button>
+                    <button onclick="cambiarTabAdmin('categorias')" id="tab-btn-categorias" class="bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap">Categorías</button>
+                    <button onclick="cambiarTabAdmin('movimientos')" id="tab-btn-movimientos" class="bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap">Entradas / Salidas</button>
+                    <button onclick="cambiarTabAdmin('proveedores')" id="tab-btn-proveedores" class="bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap">Proveedores</button>
+                    <button onclick="cambiarTabAdmin('agente')" id="tab-btn-agente" class="bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap">Agente Meta</button>
                 </div>
                 
                 <!-- SECCIÓN 1: PRODUCTOS Y STOCK -->
@@ -154,9 +155,7 @@
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                             <select id="nuevo-categoria" class="border rounded-lg px-3 py-2 text-sm bg-white">
-                                <option value="Vasos de Foam">Vasos de Foam</option>
-                                <option value="Bandejas">Bandejas y Aluminio</option>
-                                <option value="Servilletas">Servilletas</option>
+                                <!-- Las categorías se cargan dinámicamente -->
                             </select>
                             <input type="number" id="nuevo-stock" placeholder="Stock inicial (Ej. 100)" class="border rounded-lg px-3 py-2 text-sm">
                         </div>
@@ -175,7 +174,20 @@
                     </div>
                 </div>
 
-                <!-- SECCIÓN 2: ENTRADAS Y SALIDAS -->
+                <!-- SECCIÓN 2: CATEGORÍAS -->
+                <div id="tab-categorias" class="hidden space-y-4">
+                    <div class="bg-slate-50 p-4 rounded-xl border space-y-3">
+                        <h4 class="font-bold text-slate-700 text-sm">Agregar Nueva Categoría</h4>
+                        <input type="text" id="nueva-categoria-input" placeholder="Nombre de la categoría (Ej. Bolsas Plásticas)" class="w-full border rounded-lg px-3 py-2 text-sm">
+                        <button onclick="guardarCategoria()" class="w-full bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition text-sm">Guardar Categoría</button>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border space-y-2">
+                        <h4 class="font-bold text-slate-700 text-xs mb-2">Categorías Registradas:</h4>
+                        <div id="lista-categorias-admin" class="space-y-1 text-xs max-h-40 overflow-y-auto"></div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 3: ENTRADAS Y SALIDAS -->
                 <div id="tab-movimientos" class="hidden space-y-4">
                     <div class="bg-slate-50 p-4 rounded-xl border space-y-3">
                         <h4 class="font-bold text-slate-700 text-sm">Registrar Entrada (Compra) o Salida (Venta Física)</h4>
@@ -192,7 +204,7 @@
                     </div>
                 </div>
 
-                <!-- SECCIÓN 3: PROVEEDORES -->
+                <!-- SECCIÓN 4: PROVEEDORES -->
                 <div id="tab-proveedores" class="hidden space-y-4">
                     <div class="bg-slate-50 p-4 rounded-xl border space-y-3">
                         <h4 class="font-bold text-slate-700 text-sm">Registrar Proveedor</h4>
@@ -204,7 +216,7 @@
                     <div id="lista-proveedores-admin" class="space-y-2 max-h-40 overflow-y-auto text-xs"></div>
                 </div>
 
-                <!-- SECCIÓN 4: AGENTE META -->
+                <!-- SECCIÓN 5: AGENTE META -->
                 <div id="tab-agente" class="hidden space-y-4">
                     <div class="bg-slate-50 p-4 rounded-xl border">
                         <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2 mb-2">
@@ -226,7 +238,7 @@
     <!-- Scripts de Firebase y Lógica -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDbNZ3Ie76U4D6_Q5qn9SYj6AnbFpGCgHE",
@@ -242,13 +254,64 @@
         const db = getFirestore(app);
 
         let productosGlobales = [];
+        let categoriasGlobales = [];
+
+        async function cargarDatosAdmin() {
+            await cargarCategorias();
+            await cargarCatalogoAdmin();
+            await cargarProveedoresAdmin();
+        }
+
+        async function cargarCategorias() {
+            const selectNuevoProd = document.getElementById('nuevo-categoria');
+            const listaCategoriasAdmin = document.getElementById('lista-categorias-admin');
+            
+            try {
+                const querySnapshot = await getDocs(collection(db, "categorias"));
+                categoriasGlobales = [];
+                if(selectNuevoProd) selectNuevoProd.innerHTML = '';
+                if(listaCategoriasAdmin) listaCategoriasAdmin.innerHTML = '';
+
+                // Categorías por defecto si Firebase está vacío
+                const categoriasBase = querySnapshot.empty ? ["Vasos de Foam", "Bandejas y Aluminio", "Servilletas"] : [];
+
+                if (querySnapshot.empty) {
+                    for(let cat of categoriasBase) {
+                        await addDoc(collection(db, "categorias"), { nombre: cat });
+                        categoriasGlobales.push({ id: cat, nombre: cat });
+                    }
+                } else {
+                    querySnapshot.forEach(docSnap => {
+                        const data = docSnap.data();
+                        categoriasGlobales.push({ id: docSnap.id, nombre: data.nombre });
+                    });
+                }
+
+                // Poblar select y lista admin
+                categoriasGlobales.forEach(cat => {
+                    if(selectNuevoProd) {
+                        selectNuevoProd.innerHTML += `<option value="${cat.nombre}">${cat.nombre}</option>`;
+                    }
+                    if(listaCategoriasAdmin) {
+                        listaCategoriasAdmin.innerHTML += `
+                            <div class="flex justify-between items-center border-b py-1">
+                                <span><b>${cat.nombre}</b></span>
+                                <button onclick="eliminarCategoria('${cat.id}')" class="bg-red-500 hover:bg-red-600 text-white px-2 py-0.5 rounded text-[10px] font-bold">Eliminar</button>
+                            </div>`;
+                    }
+                });
+
+            } catch(e) {
+                console.error("Error al cargar categorías", e);
+            }
+        }
 
         async function cargarCatalogoAdmin() {
             const listaStock = document.getElementById('lista-stock-admin');
             const selectMov = document.getElementById('mov-producto');
             const labelInversion = document.getElementById('total-inversion-global');
             
-            if(listaStock) listaStock.innerHTML = '<p class="text-slate-400 text-center py-2">Cargando inventario desde Firebase...</p>';
+            if(listaStock) listaStock.innerHTML = '<p class="text-slate-400 text-center py-2">Cargando inventario...</p>';
 
             try {
                 const querySnapshot = await getDocs(collection(db, "productos"));
@@ -279,11 +342,15 @@
                             <div class="flex justify-between items-center border-b py-1.5">
                                 <div>
                                     <b>${data.nombre}</b> <span class="text-gray-500">($${precioNum.toFixed(2)} c/u)</span><br>
-                                    <span class="text-[10px] text-slate-400">Categoría: ${data.categoria || 'General'}</span>
+                                    <span class="text-[10px] text-slate-400">Cat: ${data.categoria || 'General'} | Stock: ${stockNum}</span>
                                 </div>
-                                <div class="text-right">
-                                    <span class="bg-verdeOscuro text-amarilloLogo px-2 py-0.5 rounded font-bold">Stock: ${stockNum}</span>
-                                    <div class="text-[10px] text-green-700 font-bold">Inv: $${subtotalItem.toFixed(2)}</div>
+                                <div class="flex items-center gap-2">
+                                    <div class="text-right">
+                                        <div class="text-[10px] text-green-700 font-bold">Inv: $${subtotalItem.toFixed(2)}</div>
+                                    </div>
+                                    <button onclick="eliminarProducto('${docSnap.id}', '${data.nombre}')" class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-[10px] font-bold">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
                                 </div>
                             </div>`;
                     }
@@ -296,8 +363,7 @@
                     labelInversion.innerText = `Inversión Total: $${inversionTotalGeneral.toFixed(2)}`;
                 }
             } catch (e) {
-                console.error("Error al cargar datos de Firebase", e);
-                if(listaStock) listaStock.innerHTML = '<p class="text-red-500 text-center py-2">Error al conectar con la base de datos.</p>';
+                console.error("Error al cargar productos", e);
             }
         }
 
@@ -340,12 +406,12 @@
 
         // Navegación Panel Admin
         window.cambiarTabAdmin = function(tab) {
-            ['productos', 'movimientos', 'proveedores', 'agente'].forEach(t => {
+            ['productos', 'categorias', 'movimientos', 'proveedores', 'agente'].forEach(t => {
                 document.getElementById(`tab-${t}`).classList.add('hidden');
-                document.getElementById(`tab-btn-${t}`).className = "bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold";
+                document.getElementById(`tab-btn-${t}`).className = "bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap";
             });
             document.getElementById(`tab-${tab}`).classList.remove('hidden');
-            document.getElementById(`tab-btn-${tab}`).className = "bg-verdeOscuro text-amarilloLogo px-3 py-1.5 rounded-lg text-xs font-bold";
+            document.getElementById(`tab-btn-${tab}`).className = "bg-verdeOscuro text-amarilloLogo px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap";
         }
 
         window.abrirAdminModal = function() { document.getElementById('modal-admin').classList.remove('hidden'); }
@@ -355,12 +421,41 @@
             if(document.getElementById('admin-pass').value === 'Desechables1982') {
                 document.getElementById('login-container').classList.add('hidden');
                 document.getElementById('dashboard-container').classList.remove('hidden');
-                cargarCatalogoAdmin();
-                cargarProveedoresAdmin();
+                cargarDatosAdmin();
             } else { alert('Clave incorrecta'); }
         }
 
-        // FUNCIÓN GUARDAR NUEVO PRODUCTO (Conectada al botón de forma segura)
+        // GUARDAR NUEVA CATEGORÍA
+        window.guardarCategoria = async function() {
+            const catInput = document.getElementById('nueva-categoria-input').value.trim();
+            if(!catInput) return alert('⚠️ Escribe el nombre de la categoría.');
+
+            const yaExiste = categoriasGlobales.some(c => c.nombre.toLowerCase() === catInput.toLowerCase());
+            if(yaExiste) return alert('⚠️ Esta categoría ya existe.');
+
+            try {
+                await addDoc(collection(db, "categorias"), { nombre: catInput });
+                alert(`✅ Categoría "${catInput}" guardada con éxito.`);
+                document.getElementById('nueva-categoria-input').value = '';
+                cargarCategorias();
+            } catch(e) {
+                alert('❌ Error al guardar la categoría.');
+            }
+        }
+
+        // ELIMINAR CATEGORÍA
+        window.eliminarCategoria = async function(id) {
+            if(!confirm('¿Estás seguro de eliminar esta categoría?')) return;
+            try {
+                await deleteDoc(doc(db, "categorias", id));
+                alert('✅ Categoría eliminada.');
+                cargarCategorias();
+            } catch(e) {
+                alert('❌ Error al eliminar la categoría.');
+            }
+        }
+
+        // GUARDAR NUEVO PRODUCTO
         window.guardarNuevoProducto = async function() {
             const nombreInput = document.getElementById('nuevo-nombre').value.trim();
             const precioVal = document.getElementById('nuevo-precio').value.trim();
@@ -376,7 +471,6 @@
             const precio = parseFloat(precioVal);
             const stock = parseInt(stockVal) || 0;
 
-            // Validación de duplicados
             const nombreLimpio = nombreInput.toLowerCase();
             const yaExiste = productosGlobales.some(p => p.nombre && p.nombre.toLowerCase() === nombreLimpio);
 
@@ -408,13 +502,11 @@
                       `- Stock Inicial: ${stock} unidades\n` +
                       `- Inversión en este lote: $${inversionTotalLote.toFixed(2)}`);
                 
-                // Limpiar campos
                 document.getElementById('nuevo-nombre').value = '';
                 document.getElementById('nuevo-precio').value = '';
                 document.getElementById('nuevo-stock').value = '';
                 document.getElementById('nuevo-imagen').value = '';
                 
-                // Recargar catálogo e inversión total
                 await cargarCatalogoAdmin();
             } catch(e) {
                 console.error("Error al guardar:", e);
@@ -422,6 +514,18 @@
             } finally {
                 btnGuardar.innerText = 'Guardar en Inventario';
                 btnGuardar.disabled = false;
+            }
+        }
+
+        // ELIMINAR PRODUCTO
+        window.eliminarProducto = async function(id, nombre) {
+            if(!confirm(`¿Estás seguro de eliminar el producto "${nombre}" del inventario?`)) return;
+            try {
+                await deleteDoc(doc(db, "productos", id));
+                alert(`✅ Producto "${nombre}" eliminado con éxito.`);
+                await cargarCatalogoAdmin();
+            } catch(e) {
+                alert('❌ Error al eliminar el producto.');
             }
         }
 
