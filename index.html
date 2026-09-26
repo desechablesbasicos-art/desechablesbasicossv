@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Desechables Básicos - Catálogo & Promociones</title>
     
-    <!-- ETIQUETAS OPEN GRAPH PARA MINIATURA EN WHATSAPP Y REDES -->
+    <!-- ETIQUETAS OPEN GRAPH PARA MINIATURA EN WHATSAPP Y REDES (ACTUALIZADAS CON TU NUEVO BANNER) -->
     <meta property="og:title" content="Desechables Básicos | Catálogo Oficial">
     <meta property="og:description" content="Vasos, bandejas, servilletas y aluminio al por mayor y detalle en Santa Ana Norte. ¡Visítanos!">
-    <meta property="og:image" content="https://i.ibb.co/607Kv0Dd/Dise-o-sin-t-tulo-10.png">
-    <meta property="og:url" content="https://desechablesbasicossv.github.io/">
+    <meta property="og:image" content="https://iili.io/n52eJNn.jpg">
+    <meta property="og:url" content="https://desechablesbasicossv.github.io/desechablesbasicossv/">
     <meta property="og:type" content="website">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -253,7 +253,7 @@
                     <div class="bg-slate-50 p-4 rounded-xl border space-y-3">
                         <h4 class="font-bold text-slate-700 text-sm">Agregar Banner Promocional al Carrusel</h4>
                         <input type="text" id="banner-titulo" placeholder="Título o Descripción corta de la promo" class="w-full border rounded-lg px-3 py-2 text-sm">
-                        <input type="text" id="banner-imagen" placeholder="URL de la imagen del banner (Sube a ImgBB)" class="w-full border rounded-lg px-3 py-2 text-sm">
+                        <input type="text" id="banner-imagen" placeholder="URL de la imagen del banner" class="w-full border rounded-lg px-3 py-2 text-sm">
                         <input type="text" id="banner-link" placeholder="Enlace de destino (Opcional, ej. https://wa.me/...)" class="w-full border rounded-lg px-3 py-2 text-sm">
                         <button onclick="guardarBanner()" class="w-full bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition text-sm">Guardar Banner en Carrusel</button>
                     </div>
@@ -314,7 +314,7 @@
         </div>
     </div>
 
-    <!-- Scripts de Firebase y Lógica del Carrusel -->
+    <!-- Scripts de Firebase y Lógica del Carrusel (Ajustado object-contain para móviles) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, setDoc, getDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -379,10 +379,9 @@
                 bannersGlobales = [];
 
                 if (querySnapshot.empty) {
-                    // Banners de respaldo por defecto si no ha agregado ninguno
+                    // Banner por defecto con tu nueva imagen
                     bannersGlobales = [
-                        { titulo: "¡Celebra y Ahorra en Desechables Básicos!", imagen: "https://i.ibb.co/MxWKPYZ1/vaso-81.jpg", link: "https://wa.me/50368483933" },
-                        { titulo: "Gran Variedad en Vasos y Bandejas al por Mayor", imagen: "https://i.ibb.co/607Kv0Dd/Dise-o-sin-t-tulo-10.png", link: "https://wa.me/50368483933" }
+                        { titulo: "¡Celebra y Ahorra en Desechables Básicos!", imagen: "https://iili.io/n52eJNn.jpg", link: "https://wa.me/50368483933" }
                     ];
                 } else {
                     querySnapshot.forEach(docSnap => {
@@ -409,9 +408,9 @@
                 const linkWrapperClose = b.link ? `</a>` : `</div>`;
 
                 container.innerHTML += `
-                    <div class="min-w-full h-full relative flex-shrink-0">
+                    <div class="min-w-full h-full relative flex-shrink-0 flex items-center justify-center bg-verdeOscuro">
                         ${linkWrapperOpen}
-                            <img src="${b.imagen}" alt="${b.titulo || 'Promoción'}" class="w-full h-full object-cover">
+                            <img src="${b.imagen}" alt="${b.titulo || 'Promoción'}" class="w-full h-full object-contain">
                             <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 text-white">
                                 <h3 class="text-sm sm:text-lg font-bold text-amarilloLogo">${b.titulo || ''}</h3>
                             </div>
@@ -460,7 +459,7 @@
                     slideActual = (slideActual + 1) % bannersGlobales.length;
                     actualizarPosicionCarrusel();
                 }
-            }, 5000); // Cambia cada 5 segundos automáticamente
+            }, 5000);
         }
 
         function reiniciarAutoplay() {
@@ -499,7 +498,7 @@
 
             lista.forEach(p => {
                 const precioNum = parseFloat(p.precio) || 0;
-                const imagenDefault = "https://i.ibb.co/MxWKPYZ1/vaso-81.jpg";
+                const imagenDefault = "https://iili.io/n52eJNn.jpg";
                 const img = p.imagen && p.imagen.trim() !== "" ? p.imagen : imagenDefault;
 
                 gridPublico.innerHTML += `
@@ -528,7 +527,6 @@
             renderizarProductos(filtrados);
         }
 
-        // Panel Admin y Banners
         async function cargarDatosAdmin() {
             await cargarCategorias();
             await cargarCatalogoAdmin();
