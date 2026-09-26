@@ -93,23 +93,37 @@
             </div>
 
             <div class="p-3 bg-white border-t flex gap-2">
-                <input type="text" id="input-chat-bot" placeholder="Escribe tu respuesta o opción..." onkeypress="manejarEnter(event)" class="flex-1 border rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-verdeOscuro">
+                <input type="text" id="input-chat-bot" placeholder="Escribe tu respuesta u opción..." onkeypress="manejarEnter(event)" class="flex-1 border rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-verdeOscuro">
                 <button onclick="enviarMensajeBot()" class="bg-verdeOscuro text-amarilloLogo px-4 py-2 rounded-lg text-xs font-bold hover:bg-verdeMedio">Enviar</button>
             </div>
         </div>
     </div>
 
-    <!-- PIE DE PÁGINA (FOOTER) -->
+    <!-- PIE DE PÁGINA (FOOTER) CON REDES SOCIALES -->
     <footer class="bg-verdeOscuro text-white border-t border-verdeMedio mt-12 py-8">
-        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
             <div>
                 <h3 class="text-amarilloLogo font-bold text-lg mb-2">DESECHABLES BÁSICOS</h3>
-                <p class="text-xs text-gray-300 mb-1"><i class="fa-solid fa-location-dot text-amarilloLogo"></i> Dirección: Urbanización Santa Ana Norte, Polígono 15 #7</p>
+                <p class="text-xs text-gray-300 mb-1"><i class="fa-solid fa-location-dot text-amarilloLogo"></i> Urbanización Santa Ana Norte, Polígono 15 #7</p>
                 <p class="text-xs text-gray-300"><i class="fa-solid fa-phone text-amarilloLogo"></i> Pedidos y WhatsApp: 6848-3933</p>
             </div>
+            
+            <!-- Redes Sociales Solicitadas -->
+            <div class="flex flex-col items-center justify-center">
+                <span class="text-xs text-amarilloLogo font-bold mb-2 uppercase tracking-wider">Síguenos en Redes</span>
+                <div class="flex gap-4">
+                    <a href="https://www.facebook.com/Basicplastic" target="_blank" class="bg-verdeMedio hover:bg-amarilloLogo hover:text-verdeOscuro text-white w-10 h-10 rounded-full flex items-center justify-center transition shadow text-lg" title="Facebook">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+                    <a href="https://www.instagram.com/desechablesbasicossv/" target="_blank" class="bg-verdeMedio hover:bg-amarilloLogo hover:text-verdeOscuro text-white w-10 h-10 rounded-full flex items-center justify-center transition shadow text-lg" title="Instagram">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+
             <div class="flex md:justify-end">
                 <a href="https://wa.me/50368483933?text=Hola,%20vengo%20de%20su%20página%20web%20y%20quiero%20hacer%20un%20pedido" target="_blank" class="bg-amarilloLogo hover:bg-amarilloHover text-verdeOscuro font-bold px-6 py-3 rounded-xl shadow transition flex items-center gap-2 text-sm">
-                    <i class="fa-brands fa-whatsapp text-lg"></i> Chatear por WhatsApp (6848-3933)
+                    <i class="fa-brands fa-whatsapp text-lg"></i> Chatear por WhatsApp
                 </a>
             </div>
         </div>
@@ -278,7 +292,6 @@
 
             const contenedor = document.getElementById('chat-mensajes-bot');
             
-            // Mensaje del usuario
             contenedor.innerHTML += `
                 <div class="text-right">
                     <span class="inline-block bg-verdeOscuro text-amarilloLogo px-3 py-1.5 rounded-lg">${texto}</span>
@@ -287,7 +300,6 @@
             input.value = '';
             contenedor.scrollTop = contenedor.scrollHeight;
 
-            // Respuesta del Bot
             setTimeout(() => {
                 let respuesta = "";
                 if(texto === "1") {
