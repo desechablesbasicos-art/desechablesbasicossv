@@ -27,7 +27,6 @@
     <header class="bg-verdeOscuro text-white shadow-md border-b border-verdeMedio">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <!-- Ícono o representación de tu logotipo de flechas circulares -->
                 <div class="bg-amarilloLogo text-verdeOscuro p-2 rounded-xl font-bold flex items-center justify-center shadow">
                     <i class="fa-solid fa-rotate text-xl"></i>
                 </div>
@@ -65,7 +64,6 @@
         
         <!-- Grid de Productos Estilo Tienda -->
         <div id="grid-productos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <!-- Cargando -->
             <div class="col-span-full text-center py-12 text-slate-400">
                 <i class="fa-solid fa-spinner fa-spin text-2xl mb-2 text-verdeOscuro"></i>
                 <p>Cargando catálogo desde Firebase...</p>
@@ -75,25 +73,27 @@
 
     <!-- MODAL DE ACCESO AL PANEL ADMIN -->
     <div id="modal-admin" class="fixed inset-0 bg-black/60 hidden flex justify-center items-center z-50 p-4">
-        <div class="bg-white rounded-xl shadow-xl max-w-md w-full p-6 relative">
+        <div class="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 relative max-h-[90vh] overflow-y-auto">
             <button onclick="cerrarAdminModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
             
             <div id="login-container">
                 <h3 class="text-xl font-bold text-slate-800 mb-2">Acceso Administrador</h3>
-                <p class="text-xs text-slate-500 mb-4">Ingresa la clave para gestionar el inventario y conectar con el agente.</p>
+                <p class="text-xs text-slate-500 mb-4">Ingresa la clave para gestionar el inventario y activar el agente de redes.</p>
                 <input type="password" id="admin-pass" placeholder="Clave de acceso" class="w-full border rounded-lg px-4 py-2 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-verdeOscuro">
                 <button onclick="verificarAdmin()" class="w-full bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition">Ingresar</button>
             </div>
 
             <!-- Panel de Administración Oculto hasta autenticarse -->
-            <div id="dashboard-container" class="hidden space-y-4">
+            <div id="dashboard-container" class="hidden space-y-6">
                 <h3 class="text-xl font-bold text-slate-800 border-b pb-2 flex items-center justify-between">
-                    <span>Gestión de Inventario</span>
-                    <span class="text-xs bg-amarilloLogo text-verdeOscuro px-2 py-1 rounded font-bold">Modo Admin</span>
+                    <span>Panel de Control</span>
+                    <span class="text-xs bg-amarilloLogo text-verdeOscuro px-2 py-1 rounded font-bold">Admin Activo</span>
                 </h3>
                 
-                <div class="space-y-3">
-                    <input type="text" id="nuevo-nombre" placeholder="Nombre del producto (Ej. Vaso Foam 8oz)" class="w-full border rounded-lg px-3 py-2 text-sm">
+                <!-- Subir Producto -->
+                <div class="space-y-3 bg-slate-50 p-4 rounded-xl border">
+                    <h4 class="font-bold text-slate-700 text-sm">Registrar Nuevo Producto</h4>
+                    <input type="text" id="nuevo-nombre" placeholder="Nombre (Ej. Vaso Foam 8oz)" class="w-full border rounded-lg px-3 py-2 text-sm">
                     <input type="text" id="nuevo-precio" placeholder="Precio (Ej. $12.50 el ciento)" class="w-full border rounded-lg px-3 py-2 text-sm">
                     <select id="nuevo-categoria" class="w-full border rounded-lg px-3 py-2 text-sm bg-white">
                         <option value="Vasos de Foam">Vasos de Foam</option>
@@ -101,20 +101,23 @@
                         <option value="Servilletas">Servilletas</option>
                     </select>
                     <input type="text" id="nuevo-imagen" placeholder="URL de imagen (opcional)" class="w-full border rounded-lg px-3 py-2 text-sm">
-                    <button onclick="guardarNuevoProducto()" class="w-full bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition text-sm">Publicar en la Tienda</button>
+                    <button onclick="guardarNuevoProducto()" class="w-full bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition text-sm">Guardar en Catálogo</button>
                 </div>
 
-                <!-- Sección Oculta del Agente de Redes Sociales -->
-                <div class="mt-6 pt-4 border-t">
+                <!-- Generador de Publicaciones con el Agente -->
+                <div class="bg-slate-50 p-4 rounded-xl border">
                     <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2 mb-2">
-                        <i class="fa-solid fa-robot text-verdeOscuro"></i> Asistente Agente Meta (Oculto)
+                        <i class="fa-solid fa-robot text-verdeOscuro"></i> Agente Creativo para Meta
                     </h4>
-                    <p class="text-xs text-slate-500 mb-2">Indícale al agente qué producto quieres enviar a Facebook e Instagram hoy:</p>
+                    <p class="text-xs text-slate-500 mb-3">Escribe el producto u oferta que quieres lanzar hoy en Facebook e Instagram:</p>
                     <div class="flex gap-2">
-                        <input type="text" id="input-agente-admin" placeholder="Ej. Promocionar bandejas de aluminio" class="flex-1 border rounded-lg px-3 py-1.5 text-xs">
-                        <button onclick="consultarAgente()" class="bg-verdeOscuro text-white px-4 py-1.5 rounded-lg text-xs hover:bg-verdeMedio">Consultar</button>
+                        <input type="text" id="input-agente-admin" placeholder="Ej. Vasos de foam para cafeterías" class="flex-1 border rounded-lg px-3 py-2 text-xs">
+                        <button onclick="consultarAgente()" class="bg-verdeOscuro text-amarilloLogo px-4 py-2 rounded-lg text-xs font-bold hover:bg-verdeMedio">Generar</button>
                     </div>
-                    <div id="respuesta-agente" class="mt-3 bg-slate-50 p-3 rounded-lg text-xs text-slate-700 hidden border"></div>
+                    
+                    <div id="respuesta-agente" class="mt-4 bg-white p-4 rounded-lg text-xs text-slate-700 hidden border shadow-sm space-y-3">
+                        <!-- Aquí se inyectará la estrategia del agente -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -160,7 +163,7 @@
             grid.innerHTML = '';
             
             if(productos.length === 0) {
-                grid.innerHTML = '<p class="col-span-full text-center text-slate-400 py-12">No hay productos disponibles en este momento. Entra al Panel Admin para agregarlos.</p>';
+                grid.innerHTML = '<p class="col-span-full text-center text-slate-400 py-12">No hay productos disponibles. Entra al Panel Admin para agregarlos.</p>';
                 return;
             }
 
@@ -248,15 +251,32 @@
             if(!texto) return;
 
             caja.classList.remove('hidden');
-            caja.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Analizando producto y redactando estrategia para Meta...';
+            caja.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> El agente está diseñando tu estrategia para Facebook e Instagram...';
 
             setTimeout(() => {
+                const copyGenerado = `¡Abastece tu negocio o evento al mejor precio! 📦🥤\n\nEn **Desechables Básicos** tenemos disponible:\n👉 ${texto}\n\nCalidad garantizada, resistencia y los mejores precios por mayor y detalle para cafeterías, restaurantes y hogares.\n\n📲 ¡Escríbenos directamente o haz tu consulta por mensaje privado para entregas!\n\n#DesechablesBasicos #VasosDeFoam #BandejasDeAluminio #Servilletas #EmprendimientoSV #ElSalvador`;
+                
                 caja.innerHTML = `
-                    <b>Instrucción generada para Facebook e Instagram:</b><br>
-                    🎨 <i>Diseño requerido:</i> Fotografía limpia destacando el producto con los colores corporativos de Desechables Básicos.<br>
-                    ✍️ <i>Copy sugerido:</i> "¡Abastece tu negocio al mejor precio! 📦🥤 Consigue ${texto} de la mejor calidad. ¡Escríbenos directamente para hacer tu pedido!"
+                    <div>
+                        <strong class="text-verdeOscuro">🎨 Especificación de Diseño Visual:</strong>
+                        <p class="text-gray-600 mt-1 mb-3">Diseña una imagen clara y limpia mostrando el producto ${texto}. Usa los tonos verde oscuro y amarillo del logo, y añade una etiqueta visible que diga <b>"¡Disponibles por Mayor y Detalle!"</b>.</p>
+                        
+                        <strong class="text-verdeOscuro">✍️ Copy para Facebook e Instagram:</strong>
+                        <textarea id="texto-copy" class="w-full h-28 border p-2 rounded mt-1 text-xs bg-gray-50">${copyGenerado}</textarea>
+                        
+                        <button onclick="copiarTexto()" class="mt-2 bg-verdeOscuro text-amarilloLogo px-3 py-1.5 rounded font-bold text-xs hover:bg-verdeMedio transition">
+                            <i class="fa-solid fa-copy"></i> Copiar Copy para Meta Business
+                        </button>
+                    </div>
                 `;
             }, 1000);
+        }
+
+        window.copiarTexto = function() {
+            const textarea = document.getElementById('texto-copy');
+            textarea.select();
+            document.execCommand('copy');
+            alert('¡Copy copiado al portapapeles! Ya puedes pegarlo en tu publicación de Facebook e Instagram.');
         }
 
         cargarCatalogo();
