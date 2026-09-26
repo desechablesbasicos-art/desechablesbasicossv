@@ -3,115 +3,434 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Oculto • Desechables Básicos</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #f8fafc; padding: 20px; }
-        .login-box, .admin-panel { max-width: 800px; margin: 40px auto; background: #1e293b; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
-        h1, h2 { margin-bottom: 20px; color: #f59e0b; }
-        input, textarea, button { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #475569; background: #0f172a; color: #fff; font-size: 1rem; }
-        button { background: #f59e0b; color: #0f172a; font-weight: bold; cursor: pointer; border: none; transition: 0.2s; }
-        button:hover { background: #d97706; }
-        .hidden { display: none; }
-        .card { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin-bottom: 15px; }
-        .chat-container { height: 250px; background: #0f172a; border: 1px solid #475569; border-radius: 8px; padding: 15px; overflow-y: auto; margin-bottom: 15px; }
-    </style>
-</head>
-<body>
-
-    <!-- PASO 1: BLOQUEO DE SEGURIDAD (PASSWORD) -->
-    <div id="login-section" class="login-box">
-        <h1>🔒 Acceso Reservado</h1>
-        <p style="color: #94a3b8; margin-bottom: 20px;">Introduce tu clave de administrador para gestionar productos y el Agente IA.</p>
-        <input type="password" id="admin-pass" placeholder="Contraseña de Administrador">
-        <button onclick="verificarAcceso()">Ingresar al Panel</button>
-    </div>
-
-    <!-- PASO 2: PANEL DE ADMINISTRACIÓN OCULTO -->
-    <div id="panel-section" class="admin-panel hidden">
-        <h1>⚙️ Panel de Control • Desechables Básicos</h1>
-        <p style="color: #94a3b8; margin-bottom: 25px;">Zona privada para gestión de inventario y pruebas del Agente IA en Santa Ana Norte.</p>
-
-        <!-- Sección de Carga de Productos -->
-        <div class="card">
-            <h2>📦 Agregar Nuevo Producto</h2>
-            <input type="text" id="prod-nombre" placeholder="Nombre del producto (Ej. Plato desc. #8)">
-            <input type="number" id="prod-precio" placeholder="Precio ($)">
-            <input type="number" id="prod-stock" placeholder="Cantidad inicial en inventario">
-            <button onclick="guardarProducto()">Guardar en la Base de Datos</button>
-            <p id="status-prod" style="font-size: 0.9rem; color: #10b981;"></p>
-        </div>
-
-        <!-- Sección de Pruebas del Agente IA -->
-        <div class="card">
-            <h2>🤖 Consola de Pruebas del Agente IA</h2>
-            <div id="chat-box" class="chat-container">
-                <div style="color: #94a3b8;">[IA]: Hola Josue. El agente está listo para asistirte con el inventario y las consultas de Desechables Básicos.</div>
-            </div>
-            <input type="text" id="ai-input" placeholder="Escribe algo para probar al Agente IA...">
-            <button onclick="probarIA()">Enviar al Agente</button>
-        </div>
-        
-        <button onclick="cerrarSesion()" style="background: #ef4444; color: #fff; margin-top: 20px;">Cerrar Sesión Segura</button>
-    </div>
-
+    <title>Desechables Básicos - Próximamente</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
-        // Define tu contraseña secreta aquí (cámbiala por la que prefieras)
-        const CLAVE_SECRETA = "admin1234";
-
-        function verificarAcceso() {
-            const ingresada = document.getElementById('admin-pass').value;
-            if (ingresada === CLAVE_SECRETA) {
-                document.getElementById('login-section').classList.add('hidden');
-                document.getElementById('panel-section').classList.remove('hidden');
-            } else {
-                alert("Contraseña incorrecta. Acceso denegado.");
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        verdeOscuro: '#132A13',
+                        verdeMedio: '#1B3B1B',
+                        amarilloLogo: '#F4D03F',
+                        amarilloHover: '#E5C138'
+                    }
+                }
             }
-        }
-
-        function guardarProducto() {
-            const nombre = document.getElementById('prod-nombre').value;
-            const precio = document.getElementById('prod-precio').value;
-            const stock = document.getElementById('prod-stock').value;
-
-            if(!nombre || !precio) {
-                alert("Por favor completa al menos el nombre y el precio.");
-                return;
-            }
-
-            // Aquí puedes conectar directamente con tu Firebase Firestore para guardar el producto
-            document.getElementById('status-prod').innerText = `¡Éxito! Producto "${nombre}" registrado correctamente para la tienda.`;
-            
-            // Limpiar campos
-            document.getElementById('prod-nombre').value = '';
-            document.getElementById('prod-precio').value = '';
-            document.getElementById('prod-stock').value = '';
-        }
-
-        function probarIA() {
-            const input = document.getElementById('ai-input');
-            const chatBox = document.getElementById('chat-box');
-            if(!input.value) return;
-
-            // Mostrar mensaje del usuario
-            chatBox.innerHTML += `<div style="margin-bottom: 8px; color: #38bdf8;"><b>Tú:</b> ${input.value}</div>`;
-            
-            const textoPregunta = input.value;
-            input.value = '';
-
-            // Simulación de respuesta del Agente IA integrada
-            setTimeout(() => {
-                chatBox.innerHTML += `<div style="margin-bottom: 8px; color: #f59e0b;"><b>Agente IA:</b> Entendido. Procesando instrucción para Desechables Básicos: "${textoPregunta}". Todo en orden en Santa Ana Norte.</div>`;
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }, 500);
-        }
-
-        function cerrarSesion() {
-            document.getElementById('panel-section').classList.add('hidden');
-            document.getElementById('login-section').classList.remove('hidden');
-            document.getElementById('admin-pass').value = '';
         }
     </script>
+</head>
+<body class="bg-gray-100 font-sans flex flex-col min-h-screen">
 
+    <!-- Barra Superior -->
+    <header class="bg-verdeOscuro text-white shadow-md border-b border-verdeMedio">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-amarilloLogo text-verdeOscuro p-2 rounded-xl font-bold flex items-center justify-center shadow">
+                    <i class="fa-solid fa-rotate text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-wide text-amarilloLogo">DESECHABLES BÁSICOS</h1>
+                    <p class="text-xs text-gray-300">Vasos, bandejas, servilletas y aluminio</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="abrirAdminModal()" class="bg-amarilloLogo hover:bg-amarilloHover text-verdeOscuro font-bold px-4 py-2 rounded-lg text-sm transition flex items-center gap-2 shadow">
+                    <i class="fa-solid fa-lock"></i> Panel Admin & Inventario
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- BANNER DE EXPECTATIVA -->
+    <main class="container mx-auto px-4 py-12 flex-1 flex items-center justify-center">
+        <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-2xl w-full p-8 text-center space-y-6">
+            <div class="w-20 h-20 bg-verdeOscuro text-amarilloLogo rounded-full flex items-center justify-center mx-auto text-3xl shadow-lg animate-bounce">
+                <i class="fa-solid fa-store"></i>
+            </div>
+            <div class="space-y-2">
+                <span class="bg-amarilloLogo text-verdeOscuro text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider">Próximamente Nueva Experiencia</span>
+                <h2 class="text-3xl font-extrabold text-slate-800">Estamos trabajando para darte un mejor servicio</h2>
+                <p class="text-slate-600 text-sm max-w-lg mx-auto">
+                    Muy pronto lanzaremos nuestra nueva plataforma digital con catálogo renovado, control de stock en tiempo real y atención más rápida. ¡Gracias por tu preferencia!
+                </p>
+            </div>
+
+            <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row justify-center gap-4">
+                <a href="https://wa.me/50368483933?text=Hola,%20vengo%20de%20su%20página%20web%20y%20quiero%20hacer%20un%20pedido" target="_blank" class="bg-verdeOscuro hover:bg-verdeMedio text-amarilloLogo font-bold px-6 py-3 rounded-xl shadow transition flex items-center justify-center gap-2 text-sm">
+                    <i class="fa-brands fa-whatsapp text-lg"></i> Consultar por WhatsApp
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- CHAT FLOTANTE DB BOT -->
+    <div id="widget-bot" class="fixed bottom-6 right-6 z-40">
+        <button onclick="toggleChat()" id="btn-abrir-chat" class="bg-verdeOscuro hover:bg-verdeMedio text-amarilloLogo p-4 rounded-full shadow-2xl flex items-center justify-center text-xl transition transform hover:scale-105">
+            <i class="fa-solid fa-comments"></i>
+        </button>
+
+        <div id="ventana-chat" class="hidden bg-white w-80 sm:w-96 rounded-2xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden">
+            <div class="bg-verdeOscuro text-white p-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                    <span class="font-bold text-sm text-amarilloLogo">DB Bot - Asistente Virtual</span>
+                </div>
+                <button onclick="toggleChat()" class="text-slate-300 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <div id="chat-mensajes-bot" class="p-4 h-72 overflow-y-auto space-y-3 bg-slate-50 text-xs text-slate-700"></div>
+
+            <div class="p-3 bg-white border-t flex gap-2">
+                <input type="text" id="input-chat-bot" placeholder="Escribe tu respuesta u opción..." onkeypress="manejarEnter(event)" class="flex-1 border rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-verdeOscuro">
+                <button onclick="enviarMensajeBot()" class="bg-verdeOscuro text-amarilloLogo px-4 py-2 rounded-lg text-xs font-bold hover:bg-verdeMedio">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="bg-verdeOscuro text-white border-t border-verdeMedio mt-12 py-8">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+            <div>
+                <h3 class="text-amarilloLogo font-bold text-lg mb-2">DESECHABLES BÁSICOS</h3>
+                <p class="text-xs text-gray-300 mb-1"><i class="fa-solid fa-location-dot text-amarilloLogo"></i> Urbanización Santa Ana Norte, Polígono 15 #7</p>
+                <p class="text-xs text-gray-300"><i class="fa-solid fa-phone text-amarilloLogo"></i> Pedidos y WhatsApp: 6848-3933</p>
+            </div>
+            
+            <div class="flex flex-col items-center justify-center">
+                <span class="text-xs text-amarilloLogo font-bold mb-2 uppercase tracking-wider">Síguenos en Redes</span>
+                <div class="flex gap-4">
+                    <a href="https://www.facebook.com/Basicplastic" target="_blank" class="bg-verdeMedio hover:bg-amarilloLogo hover:text-verdeOscuro text-white w-10 h-10 rounded-full flex items-center justify-center transition shadow text-lg"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/desechablesbasicossv/" target="_blank" class="bg-verdeMedio hover:bg-amarilloLogo hover:text-verdeOscuro text-white w-10 h-10 rounded-full flex items-center justify-center transition shadow text-lg"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+            </div>
+
+            <div class="flex md:justify-end">
+                <a href="https://wa.me/50368483933?text=Hola,%20vengo%20de%20su%20página%20web%20y%20quiero%20hacer%20un%20pedido" target="_blank" class="bg-amarilloLogo hover:bg-amarilloHover text-verdeOscuro font-bold px-6 py-3 rounded-xl shadow transition flex items-center gap-2 text-sm">
+                    <i class="fa-brands fa-whatsapp text-lg"></i> Chatear por WhatsApp
+                </a>
+            </div>
+        </div>
+        <div class="container mx-auto px-4 mt-6 pt-4 border-t border-verdeMedio text-center text-xs text-gray-400">
+            &copy; 2026 Desechables Básicos. Todos los derechos reservados.
+        </div>
+    </footer>
+
+    <!-- MODAL PANEL ADMIN E INVENTARIO -->
+    <div id="modal-admin" class="fixed inset-0 bg-black/60 hidden flex justify-center items-center z-50 p-4">
+        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full p-6 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="cerrarAdminModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            
+            <div id="login-container">
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Acceso Administrador</h3>
+                <p class="text-xs text-slate-500 mb-4">Ingresa la clave para gestionar el inventario, entradas, salidas y proveedores.</p>
+                <input type="password" id="admin-pass" placeholder="Clave de acceso" class="w-full border rounded-lg px-4 py-2 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-verdeOscuro">
+                <button onclick="verificarAdmin()" class="w-full bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition">Ingresar</button>
+            </div>
+
+            <!-- Panel de Administración e Inventario -->
+            <div id="dashboard-container" class="hidden space-y-6">
+                <h3 class="text-xl font-bold text-slate-800 border-b pb-2 flex items-center justify-between">
+                    <span>Panel de Control & Inventario</span>
+                    <span class="text-xs bg-amarilloLogo text-verdeOscuro px-2 py-1 rounded font-bold">Admin Activo</span>
+                </h3>
+
+                <!-- Pestañas del Panel -->
+                <div class="flex gap-2 border-b pb-2">
+                    <button onclick="cambiarTabAdmin('productos')" id="tab-btn-productos" class="bg-verdeOscuro text-amarilloLogo px-3 py-1.5 rounded-lg text-xs font-bold">Productos & Stock</button>
+                    <button onclick="cambiarTabAdmin('movimientos')" id="tab-btn-movimientos" class="bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold">Entradas / Salidas</button>
+                    <button onclick="cambiarTabAdmin('proveedores')" id="tab-btn-proveedores" class="bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold">Proveedores</button>
+                    <button onclick="cambiarTabAdmin('agente')" id="tab-btn-agente" class="bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold">Agente Meta</button>
+                </div>
+                
+                <!-- SECCIÓN 1: PRODUCTOS Y STOCK -->
+                <div id="tab-productos" class="space-y-4">
+                    <div class="bg-slate-50 p-4 rounded-xl border space-y-2">
+                        <h4 class="font-bold text-slate-700 text-sm">Registrar Nuevo Producto / Stock Inicial</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <input type="text" id="nuevo-nombre" placeholder="Nombre (Ej. Vaso Foam 8oz)" class="border rounded-lg px-3 py-2 text-sm">
+                            <input type="text" id="nuevo-precio" placeholder="Precio (Ej. $12.50 el ciento)" class="border rounded-lg px-3 py-2 text-sm">
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <select id="nuevo-categoria" class="border rounded-lg px-3 py-2 text-sm bg-white">
+                                <option value="Vasos de Foam">Vasos de Foam</option>
+                                <option value="Bandejas">Bandejas y Aluminio</option>
+                                <option value="Servilletas">Servilletas</option>
+                            </select>
+                            <input type="number" id="nuevo-stock" placeholder="Stock inicial (Ej. 100)" class="border rounded-lg px-3 py-2 text-sm">
+                        </div>
+                        <input type="text" id="nuevo-imagen" placeholder="URL de imagen (opcional)" class="w-full border rounded-lg px-3 py-2 text-sm">
+                        <button onclick="guardarNuevoProducto()" class="w-full bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition text-sm">Guardar en Inventario</button>
+                    </div>
+                    
+                    <div class="bg-white p-3 rounded-xl border max-h-48 overflow-y-auto">
+                        <h4 class="font-bold text-slate-700 text-xs mb-2">Inventario Actual en Firebase:</h4>
+                        <div id="lista-stock-admin" class="space-y-1 text-xs"></div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 2: ENTRADAS Y SALIDAS -->
+                <div id="tab-movimientos" class="hidden space-y-4">
+                    <div class="bg-slate-50 p-4 rounded-xl border space-y-3">
+                        <h4 class="font-bold text-slate-700 text-sm">Registrar Entrada (Compra) o Salida (Venta Física)</h4>
+                        <select id="mov-producto" class="w-full border rounded-lg px-3 py-2 text-sm bg-white"></select>
+                        <div class="grid grid-cols-2 gap-2">
+                            <select id="mov-tipo" class="border rounded-lg px-3 py-2 text-sm bg-white">
+                                <option value="entrada">Entrada (Compra a Proveedor)</option>
+                                <option value="salida">Salida (Venta Física Local)</option>
+                            </select>
+                            <input type="number" id="mov-cantidad" placeholder="Cantidad" class="border rounded-lg px-3 py-2 text-sm">
+                        </div>
+                        <input type="text" id="mov-detalle" placeholder="Motivo / Proveedor / Cliente" class="w-full border rounded-lg px-3 py-2 text-sm">
+                        <button onclick="registrarMovimiento()" class="w-full bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition text-sm">Actualizar Stock</button>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 3: PROVEEDORES -->
+                <div id="tab-proveedores" class="hidden space-y-4">
+                    <div class="bg-slate-50 p-4 rounded-xl border space-y-3">
+                        <h4 class="font-bold text-slate-700 text-sm">Registrar Proveedor</h4>
+                        <input type="text" id="prov-nombre" placeholder="Nombre de empresa o proveedor" class="w-full border rounded-lg px-3 py-2 text-sm">
+                        <input type="text" id="prov-contacto" placeholder="Teléfono o persona de contacto" class="w-full border rounded-lg px-3 py-2 text-sm">
+                        <input type="text" id="prov-producto" placeholder="¿Qué productos provee?" class="w-full border rounded-lg px-3 py-2 text-sm">
+                        <button onclick="guardarProveedor()" class="w-full bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition text-sm">Guardar Proveedor</button>
+                    </div>
+                    <div id="lista-proveedores-admin" class="space-y-2 max-h-40 overflow-y-auto text-xs"></div>
+                </div>
+
+                <!-- SECCIÓN 4: AGENTE META -->
+                <div id="tab-agente" class="hidden space-y-4">
+                    <div class="bg-slate-50 p-4 rounded-xl border">
+                        <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2 mb-2">
+                            <i class="fa-solid fa-robot text-verdeOscuro"></i> Agente Creativo para Meta
+                        </h4>
+                        <p class="text-xs text-slate-500 mb-3">Escribe el producto u oferta que quieres lanzar hoy:</p>
+                        <div class="flex gap-2">
+                            <input type="text" id="input-agente-admin" placeholder="Ej. Vasos de foam para cafeterías" class="flex-1 border rounded-lg px-3 py-2 text-xs">
+                            <button onclick="consultarAgente()" class="bg-verdeOscuro text-amarilloLogo px-4 py-2 rounded-lg text-xs font-bold hover:bg-verdeMedio">Generar</button>
+                        </div>
+                        <div id="respuesta-agente" class="mt-4 bg-white p-4 rounded-lg text-xs text-slate-700 hidden border shadow-sm space-y-3"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts de Firebase y Lógica -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDbNZ3Ie76U4D6_Q5qn9SYj6AnbFpGCgHE",
+            authDomain: "desechablesbasicossv.firebaseapp.com",
+            projectId: "desechablesbasicossv",
+            storageBucket: "desechablesbasicossv.firebasestorage.app",
+            messagingSenderId: "17410310479",
+            appId: "1:17410310479:web:323c25338b206ef2fcc53a",
+            measurementId: "G-ZDG17LZDHE"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let productosGlobales = [];
+
+        async function cargarCatalogoAdmin() {
+            const listaStock = document.getElementById('lista-stock-admin');
+            const selectMov = document.getElementById('mov-producto');
+            
+            try {
+                const querySnapshot = await getDocs(collection(db, "productos"));
+                productosGlobales = [];
+                if(listaStock) listaStock.innerHTML = '';
+                if(selectMov) selectMov.innerHTML = '';
+
+                querySnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    productosGlobales.push({ id: docSnap.id, ...data });
+                    
+                    if(listaStock) {
+                        listaStock.innerHTML += `<div class="flex justify-between border-b py-1"><span><b>${data.nombre}</b></span> <span class="bg-verdeOscuro text-amarilloLogo px-2 rounded font-bold">Stock: ${data.stock || 0}</span></div>`;
+                    }
+                    if(selectMov) {
+                        selectMov.innerHTML += `<option value="${docSnap.id}">${data.nombre} (Stock actual: ${data.stock || 0})</option>`;
+                    }
+                });
+            } catch (e) {
+                console.error("Error al cargar datos de Firebase", e);
+            }
+        }
+
+        // Chat DB Bot
+        let chatIniciado = false;
+        window.toggleChat = function() {
+            const ventana = document.getElementById('ventana-chat');
+            ventana.classList.toggle('hidden');
+            if(!chatIniciado && !ventana.classList.contains('hidden')) {
+                chatIniciado = true;
+                document.getElementById('chat-mensajes-bot').innerHTML = `
+                    <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-100">
+                        <b>DB Bot:</b> Hola, actualmente estamos actualizando nuestro sistema. Si deseas hacer un pedido u oprimir <b>1</b> para hablar con nuestro personal, escríbenos.
+                    </div>
+                `;
+            }
+        }
+
+        window.manejarEnter = function(e) { if(e.key === 'Enter') enviarMensajeBot(); }
+
+        window.enviarMensajeBot = function() {
+            const input = document.getElementById('input-chat-bot');
+            const texto = input.value.trim();
+            if(!texto) return;
+            const contenedor = document.getElementById('chat-mensajes-bot');
+            
+            contenedor.innerHTML += `<div class="text-right"><span class="inline-block bg-verdeOscuro text-amarilloLogo px-3 py-1.5 rounded-lg">${texto}</span></div>`;
+            input.value = '';
+            contenedor.scrollTop = contenedor.scrollHeight;
+
+            setTimeout(() => {
+                let respuesta = texto === "1" ? "Gracias por contactarnos. Te estamos comunicando con nuestro personal por WhatsApp." : `Hemos registrado tu mensaje: "${texto}". Nos pondremos en contacto contigo muy pronto o puedes escribirnos al 6848-3933.`;
+                contenedor.innerHTML += `<div class="bg-white p-3 rounded-xl shadow-sm border border-slate-100"><b>DB Bot:</b> ${respuesta}</div>`;
+                contenedor.scrollTop = contenedor.scrollHeight;
+                if(texto === "1") {
+                    setTimeout(() => window.open("https://wa.me/50368483933?text=Hola,%20presioné%201%20en%20el%20bot%20de%20la%20web", "_blank"), 1500);
+                }
+            }, 600);
+        }
+
+        // Navegación Panel Admin
+        window.cambiarTabAdmin = function(tab) {
+            ['productos', 'movimientos', 'proveedores', 'agente'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+                document.getElementById(`tab-btn-${t}`).className = "bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold";
+            });
+            document.getElementById(`tab-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-btn-${tab}`).className = "bg-verdeOscuro text-amarilloLogo px-3 py-1.5 rounded-lg text-xs font-bold";
+        }
+
+        window.abrirAdminModal = function() { document.getElementById('modal-admin').classList.remove('hidden'); }
+        window.cerrarAdminModal = function() { document.getElementById('modal-admin').classList.add('hidden'); }
+
+        window.verificarAdmin = function() {
+            if(document.getElementById('admin-pass').value === 'Desechables1982') {
+                document.getElementById('login-container').classList.add('hidden');
+                document.getElementById('dashboard-container').classList.remove('hidden');
+                cargarCatalogoAdmin();
+                cargarProveedoresAdmin();
+            } else { alert('Clave incorrecta'); }
+        }
+
+        // Guardar Nuevo Producto
+        window.guardarNuevoProducto = async function() {
+            const nombre = document.getElementById('nuevo-nombre').value;
+            const precio = document.getElementById('nuevo-precio').value;
+            const categoria = document.getElementById('nuevo-categoria').value;
+            const stock = parseInt(document.getElementById('nuevo-stock').value) || 0;
+            const imagen = document.getElementById('nuevo-imagen').value;
+
+            if(!nombre || !precio) return alert('Completa al menos el nombre y el precio.');
+
+            try {
+                await addDoc(collection(db, "productos"), { nombre, precio, categoria, stock, imagen, fecha: new Date() });
+                alert('¡Producto y stock guardados con éxito!');
+                document.getElementById('nuevo-nombre').value = '';
+                document.getElementById('nuevo-precio').value = '';
+                document.getElementById('nuevo-stock').value = '';
+                document.getElementById('nuevo-imagen').value = '';
+                cargarCatalogoAdmin();
+            } catch(e) { alert('Error al guardar en Firebase'); }
+        }
+
+        // Registrar Entradas y Salidas
+        window.registrarMovimiento = async function() {
+            const prodId = document.getElementById('mov-producto').value;
+            const tipo = document.getElementById('mov-tipo').value;
+            const cantidad = parseInt(document.getElementById('mov-cantidad').value) || 0;
+            const detalle = document.getElementById('mov-detalle').value;
+
+            if(cantidad <= 0) return alert('Ingresa una cantidad válida.');
+
+            try {
+                const prodRef = doc(db, "productos", prodId);
+                const ajuste = tipo === 'entrada' ? cantidad : -cantidad;
+                
+                await updateDoc(prodRef, { stock: increment(ajuste) });
+                await addDoc(collection(db, "movimientos"), { productoId: prodId, tipo, cantidad, detalle, fecha: new Date() });
+
+                alert(`¡Stock actualizado con éxito! (${tipo === 'entrada' ? '+' : '-'}${cantidad})`);
+                document.getElementById('mov-cantidad').value = '';
+                document.getElementById('mov-detalle').value = '';
+                cargarCatalogoAdmin();
+            } catch(e) { alert('Error al registrar movimiento'); }
+        }
+
+        // Proveedores
+        window.guardarProveedor = async function() {
+            const nombre = document.getElementById('prov-nombre').value;
+            const contacto = document.getElementById('prov-contacto').value;
+            const producto = document.getElementById('prov-producto').value;
+
+            if(!nombre) return alert('Ingresa el nombre del proveedor.');
+
+            try {
+                await addDoc(collection(db, "proveedores"), { nombre, contacto, producto, fecha: new Date() });
+                alert('¡Proveedor registrado!');
+                document.getElementById('prov-nombre').value = '';
+                document.getElementById('prov-contacto').value = '';
+                document.getElementById('prov-producto').value = '';
+                cargarProveedoresAdmin();
+            } catch(e) { alert('Error al guardar proveedor'); }
+        }
+
+        async function cargarProveedoresAdmin() {
+            const contenedor = document.getElementById('lista-proveedores-admin');
+            if(!contenedor) return;
+            try {
+                const querySnapshot = await getDocs(collection(db, "proveedores"));
+                contenedor.innerHTML = '<h4 class="font-bold text-slate-700 text-xs mb-1">Proveedores Registrados:</h4>';
+                querySnapshot.forEach(docSnap => {
+                    const p = docSnap.data();
+                    contenedor.innerHTML += `<div class="border-b py-1"><b>${p.nombre}</b> - Tel: ${p.contacto || 'N/A'} (Suministra: ${p.producto || 'N/A'})</div>`;
+                });
+            } catch(e) { console.log(e); }
+        }
+
+        window.consultarAgente = function() {
+            const texto = document.getElementById('input-agente-admin').value;
+            const caja = document.getElementById('respuesta-agente');
+            if(!texto) return;
+
+            caja.classList.remove('hidden');
+            caja.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> El agente está diseñando tu estrategia para Facebook e Instagram...';
+
+            setTimeout(() => {
+                const copyGenerado = `¡Abastece tu negocio o evento al mejor precio! 📦🥤\n\nEn **Desechables Básicos** estamos renovándonos para ti:\n👉 ${texto}\n\nCalidad garantizada, resistencia y los mejores precios por mayor y detalle.\n\n📲 ¡Escríbenos al 6848-3933 o visítanos en Urbanización Santa Ana Norte, Polígono 15 #7!\n\n#DesechablesBasicos #VasosDeFoam #BandejasDeAluminio #ElSalvador`;
+                
+                caja.innerHTML = `
+                    <div>
+                        <strong class="text-verdeOscuro">🎨 Especificación de Diseño Visual:</strong>
+                        <p class="text-gray-600 mt-1 mb-3">Diseña una imagen limpia del producto ${texto} con los colores verde y amarillo y la dirección de Santa Ana Norte.</p>
+                        
+                        <strong class="text-verdeOscuro">✍️ Copy para Meta:</strong>
+                        <textarea id="texto-copy" class="w-full h-28 border p-2 rounded mt-1 text-xs bg-gray-50">${copyGenerado}</textarea>
+                        
+                        <button onclick="copiarTexto()" class="mt-2 bg-verdeOscuro text-amarilloLogo px-3 py-1.5 rounded font-bold text-xs hover:bg-verdeMedio transition">
+                            <i class="fa-solid fa-copy"></i> Copiar Copy
+                        </button>
+                    </div>
+                `;
+            }, 1000);
+        }
+
+        window.copiarTexto = function() {
+            const textarea = document.getElementById('texto-copy');
+            textarea.select();
+            document.execCommand('copy');
+            alert('¡Copy copiado al portapapeles!');
+        }
+    </script>
 </body>
 </html>
