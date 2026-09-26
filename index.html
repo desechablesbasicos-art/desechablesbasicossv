@@ -161,7 +161,7 @@
                             <input type="number" id="nuevo-stock" placeholder="Stock inicial (Ej. 100)" class="border rounded-lg px-3 py-2 text-sm">
                         </div>
                         <input type="text" id="nuevo-imagen" placeholder="URL de imagen (opcional)" class="w-full border rounded-lg px-3 py-2 text-sm">
-                        <button onclick="guardarNuevoProducto()" class="w-full bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition text-sm">Guardar en Inventario</button>
+                        <button id="btn-guardar-prod" onclick="guardarNuevoProducto()" class="w-full bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition text-sm">Guardar en Inventario</button>
                     </div>
                     
                     <div class="bg-white p-3 rounded-xl border space-y-2">
@@ -360,7 +360,7 @@
             } else { alert('Clave incorrecta'); }
         }
 
-        // Guardar Nuevo Producto con Validación de Duplicados, Alerta y Cálculo de Inversión
+        // FUNCIÓN GUARDAR NUEVO PRODUCTO (Conectada al botón de forma segura)
         window.guardarNuevoProducto = async function() {
             const nombreInput = document.getElementById('nuevo-nombre').value.trim();
             const precioVal = document.getElementById('nuevo-precio').value.trim();
@@ -376,6 +376,7 @@
             const precio = parseFloat(precioVal);
             const stock = parseInt(stockVal) || 0;
 
+            // Validación de duplicados
             const nombreLimpio = nombreInput.toLowerCase();
             const yaExiste = productosGlobales.some(p => p.nombre && p.nombre.toLowerCase() === nombreLimpio);
 
@@ -383,6 +384,10 @@
                 alert(`⚠️ ¡Producto Duplicado!\n\nEl producto "${nombreInput}" ya se encuentra registrado en el inventario.`);
                 return;
             }
+
+            const btnGuardar = document.getElementById('btn-guardar-prod');
+            btnGuardar.innerText = 'Guardando en Firebase...';
+            btnGuardar.disabled = true;
 
             try {
                 await addDoc(collection(db, "productos"), { 
@@ -403,15 +408,20 @@
                       `- Stock Inicial: ${stock} unidades\n` +
                       `- Inversión en este lote: $${inversionTotalLote.toFixed(2)}`);
                 
+                // Limpiar campos
                 document.getElementById('nuevo-nombre').value = '';
                 document.getElementById('nuevo-precio').value = '';
                 document.getElementById('nuevo-stock').value = '';
                 document.getElementById('nuevo-imagen').value = '';
                 
-                cargarCatalogoAdmin();
+                // Recargar catálogo e inversión total
+                await cargarCatalogoAdmin();
             } catch(e) {
-                console.error(e);
+                console.error("Error al guardar:", e);
                 alert('❌ Error al guardar el producto en la base de datos.');
+            } finally {
+                btnGuardar.innerText = 'Guardar en Inventario';
+                btnGuardar.disabled = false;
             }
         }
 
