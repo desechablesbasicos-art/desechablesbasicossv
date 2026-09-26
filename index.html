@@ -150,7 +150,7 @@
                         <h4 class="font-bold text-slate-700 text-sm">Registrar Nuevo Producto / Stock Inicial</h4>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                             <input type="text" id="nuevo-nombre" placeholder="Nombre (Ej. Vaso Foam 8oz)" class="border rounded-lg px-3 py-2 text-sm">
-                            <input type="text" id="nuevo-precio" placeholder="Precio (Ej. $12.50 el ciento)" class="border rounded-lg px-3 py-2 text-sm">
+                            <input type="number" step="0.01" id="nuevo-precio" placeholder="Precio unitario (Ej. 12.50)" class="border rounded-lg px-3 py-2 text-sm">
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                             <select id="nuevo-categoria" class="border rounded-lg px-3 py-2 text-sm bg-white">
@@ -164,9 +164,12 @@
                         <button onclick="guardarNuevoProducto()" class="w-full bg-verdeOscuro text-amarilloLogo py-2 rounded-lg font-bold hover:bg-verdeMedio transition text-sm">Guardar en Inventario</button>
                     </div>
                     
-                    <div class="bg-white p-3 rounded-xl border max-h-48 overflow-y-auto">
-                        <h4 class="font-bold text-slate-700 text-xs mb-2">Inventario Actual en Firebase:</h4>
-                        <div id="lista-stock-admin" class="space-y-1 text-xs"></div>
+                    <div class="bg-white p-3 rounded-xl border space-y-2">
+                        <div class="flex justify-between items-center border-b pb-2">
+                            <h4 class="font-bold text-slate-700 text-xs">Inventario Actual en Firebase:</h4>
+                            <span id="total-inversion-global" class="text-xs bg-green-100 text-green-800 font-bold px-2 py-1 rounded">Inversión Total: $0.00</span>
+                        </div>
+                        <div id="lista-stock-admin" class="space-y-1 text-xs max-h-48 overflow-y-auto"></div>
                     </div>
                 </div>
 
@@ -241,6 +244,7 @@
         async function cargarCatalogoAdmin() {
             const listaStock = document.getElementById('lista-stock-admin');
             const selectMov = document.getElementById('mov-producto');
+            const labelInversion = document.getElementById('total-inversion-global');
             
             try {
                 const querySnapshot = await getDocs(collection(db, "productos"));
@@ -248,17 +252,38 @@
                 if(listaStock) listaStock.innerHTML = '';
                 if(selectMov) selectMov.innerHTML = '';
 
+                let inversionTotalGeneral = 0;
+
                 querySnapshot.forEach((docSnap) => {
                     const data = docSnap.data();
                     productosGlobales.push({ id: docSnap.id, ...data });
                     
+                    const precioNum = parseFloat(data.precio) || 0;
+                    const stockNum = parseInt(data.stock) || 0;
+                    const subtotalItem = precioNum * stockNum;
+                    inversionTotalGeneral += subtotalItem;
+                    
                     if(listaStock) {
-                        listaStock.innerHTML += `<div class="flex justify-between border-b py-1"><span><b>${data.nombre}</b></span> <span class="bg-verdeOscuro text-amarilloLogo px-2 rounded font-bold">Stock: ${data.stock || 0}</span></div>`;
+                        listaStock.innerHTML += `
+                            <div class="flex justify-between items-center border-b py-1.5">
+                                <div>
+                                    <b>${data.nombre}</b> <span class="text-gray-500">($${precioNum.toFixed(2)} c/u)</span><br>
+                                    <span class="text-[10px] text-slate-400">Categoría: ${data.categoria || 'General'}</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="bg-verdeOscuro text-amarilloLogo px-2 py-0.5 rounded font-bold">Stock: ${stockNum}</span>
+                                    <div class="text-[10px] text-green-700 font-bold">Inv: $${subtotalItem.toFixed(2)}</div>
+                                </div>
+                            </div>`;
                     }
                     if(selectMov) {
-                        selectMov.innerHTML += `<option value="${docSnap.id}">${data.nombre} (Stock actual: ${data.stock || 0})</option>`;
+                        selectMov.innerHTML += `<option value="${docSnap.id}">${data.nombre} (Stock actual: ${stockNum})</option>`;
                     }
                 });
+
+                if(labelInversion) {
+                    labelInversion.innerText = `Inversión Total: $${inversionTotalGeneral.toFixed(2)}`;
+                }
             } catch (e) {
                 console.error("Error al cargar datos de Firebase", e);
             }
@@ -323,24 +348,29 @@
             } else { alert('Clave incorrecta'); }
         }
 
-        // Guardar Nuevo Producto con Validación de Duplicados y Mensaje de Éxito
+        // Guardar Nuevo Producto con Validación de Duplicados, Alerta y Cálculo de Inversión
         window.guardarNuevoProducto = async function() {
             const nombreInput = document.getElementById('nuevo-nombre').value.trim();
-            const precio = document.getElementById('nuevo-precio').value.trim();
+            const precioVal = document.getElementById('nuevo-precio').value.trim();
             const categoria = document.getElementById('nuevo-categoria').value;
-            const stock = parseInt(document.getElementById('nuevo-stock').value) || 0;
+            const stockVal = document.getElementById('nuevo-stock').value.trim();
             const imagen = document.getElementById('nuevo-imagen').value.trim();
 
-            if(!nombreInput || !precio) {
-                return alert('⚠️ Por favor completa al menos el nombre y el precio.');
+            if(!nombreInput || !precioVal) {
+                alert('⚠️ Por favor completa al menos el nombre y el precio unitario.');
+                return;
             }
+
+            const precio = parseFloat(precioVal);
+            const stock = parseInt(stockVal) || 0;
 
             // Verificar si ya existe un producto con el mismo nombre (Ignorando mayúsculas/minúsculas)
             const nombreLimpio = nombreInput.toLowerCase();
             const yaExiste = productosGlobales.some(p => p.nombre && p.nombre.toLowerCase() === nombreLimpio);
 
             if (yaExiste) {
-                return alert(`⚠️ ¡Duplicado detectado!\n\nEl producto "${nombreInput}" ya se encuentra registrado en el inventario.`);
+                alert(`⚠️ ¡Producto Duplicado!\n\nEl producto "${nombreInput}" ya se encuentra registrado en el inventario. No se puede duplicar.`);
+                return;
             }
 
             try {
@@ -353,7 +383,14 @@
                     fecha: new Date() 
                 });
 
-                alert(`✅ ¡Guardado con éxito!\n\nEl producto "${nombreInput}" se ha registrado correctamente en el inventario.`);
+                const inversionTotalLote = precio * stock;
+
+                alert(`✅ ¡Producto Guardado con Éxito!\n\n` +
+                      `- Producto: ${nombreInput}\n` +
+                      `- Categoría: ${categoria}\n` +
+                      `- Precio Unitario: $${precio.toFixed(2)}\n` +
+                      `- Stock Inicial: ${stock} unidades\n` +
+                      `- Inversión en este lote: $${inversionTotalLote.toFixed(2)}`);
                 
                 // Limpiar campos del formulario
                 document.getElementById('nuevo-nombre').value = '';
@@ -376,7 +413,10 @@
             const cantidad = parseInt(document.getElementById('mov-cantidad').value) || 0;
             const detalle = document.getElementById('mov-detalle').value;
 
-            if(cantidad <= 0) return alert('Ingresa una cantidad válida.');
+            if(cantidad <= 0) {
+                alert('Ingresa una cantidad válida.');
+                return;
+            }
 
             try {
                 const prodRef = doc(db, "productos", prodId);
@@ -385,11 +425,13 @@
                 await updateDoc(prodRef, { stock: increment(ajuste) });
                 await addDoc(collection(db, "movimientos"), { productoId: prodId, tipo, cantidad, detalle, fecha: new Date() });
 
-                alert(`¡Stock actualizado con éxito! (${tipo === 'entrada' ? '+' : '-'}${cantidad})`);
+                alert(`✅ ¡Stock actualizado con éxito! (${tipo === 'entrada' ? '+' : '-'}${cantidad} unidades)`);
                 document.getElementById('mov-cantidad').value = '';
                 document.getElementById('mov-detalle').value = '';
                 cargarCatalogoAdmin();
-            } catch(e) { alert('Error al registrar movimiento'); }
+            } catch(e) { 
+                alert('Error al registrar movimiento'); 
+            }
         }
 
         // Proveedores
@@ -398,16 +440,21 @@
             const contacto = document.getElementById('prov-contacto').value;
             const producto = document.getElementById('prov-producto').value;
 
-            if(!nombre) return alert('Ingresa el nombre del proveedor.');
+            if(!nombre) {
+                alert('Ingresa el nombre del proveedor.');
+                return;
+            }
 
             try {
                 await addDoc(collection(db, "proveedores"), { nombre, contacto, producto, fecha: new Date() });
-                alert('¡Proveedor registrado!');
+                alert('✅ ¡Proveedor registrado con éxito!');
                 document.getElementById('prov-nombre').value = '';
                 document.getElementById('prov-contacto').value = '';
                 document.getElementById('prov-producto').value = '';
                 cargarProveedoresAdmin();
-            } catch(e) { alert('Error al guardar proveedor'); }
+            } catch(e) { 
+                alert('Error al guardar proveedor'); 
+            }
         }
 
         async function cargarProveedoresAdmin() {
