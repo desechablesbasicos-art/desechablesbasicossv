@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Desechables Básicos - Catálogo & Promociones</title>
     
-    <!-- ETIQUETAS OPEN GRAPH PARA MINIATURA EN WHATSAPP Y REDES (ACTUALIZADAS CON TU NUEVO BANNER) -->
+    <!-- ETIQUETAS OPEN GRAPH PARA MINIATURA EN WHATSAPP Y REDES -->
     <meta property="og:title" content="Desechables Básicos | Catálogo Oficial">
     <meta property="og:description" content="Vasos, bandejas, servilletas y aluminio al por mayor y detalle en Santa Ana Norte. ¡Visítanos!">
     <meta property="og:image" content="https://iili.io/n52eJNn.jpg">
@@ -79,14 +79,10 @@
         <!-- 2. VISTA DE LA PÁGINA TERMINADA -->
         <div id="vista-terminada" class="space-y-6">
             
-            <!-- CARRUSEL DE BANNERS PROMOCIONALES (ESTILO SUPER SELECTOS) -->
+            <!-- CARRUSEL DE BANNERS PROMOCIONALES -->
             <div class="relative w-full rounded-2xl overflow-hidden shadow-xl bg-verdeOscuro group">
-                <!-- Contenedor de diapositivas -->
-                <div id="carrusel-slides-container" class="relative h-56 sm:h-72 md:h-96 w-full flex transition-transform duration-500 ease-out">
-                    <!-- Banners se cargan dinámicamente desde Firebase o respaldo -->
-                </div>
+                <div id="carrusel-slides-container" class="relative h-56 sm:h-72 md:h-96 w-full flex transition-transform duration-500 ease-out"></div>
 
-                <!-- Botones de Navegación Lateral (Flechas) -->
                 <button onclick="moverSlide(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white w-10 h-10 rounded-full flex items-center justify-center text-lg transition shadow-md backdrop-blur-sm">
                     <i class="fa-solid fa-chevron-left"></i>
                 </button>
@@ -94,10 +90,7 @@
                     <i class="fa-solid fa-chevron-right"></i>
                 </button>
 
-                <!-- Indicadores de Puntos (Dots abajo) -->
-                <div id="carrusel-dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-                    <!-- Generados dinámicamente -->
-                </div>
+                <div id="carrusel-dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10"></div>
             </div>
 
             <!-- Buscador y Título del Catálogo -->
@@ -173,7 +166,7 @@
 
     <!-- MODAL PANEL ADMIN E INVENTARIO -->
     <div id="modal-admin" class="fixed inset-0 bg-black/60 hidden flex justify-center items-center z-50 p-4">
-        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full p-6 relative max-h-[90vh] overflow-y-auto">
+        <div class="bg-white rounded-xl shadow-xl max-w-3xl w-full p-6 relative max-h-[90vh] overflow-y-auto">
             <button onclick="cerrarAdminModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
             
             <div id="login-container">
@@ -204,12 +197,97 @@
                 <!-- Pestañas del Panel -->
                 <div class="flex gap-2 border-b pb-2 overflow-x-auto">
                     <button onclick="cambiarTabAdmin('productos')" id="tab-btn-productos" class="bg-verdeOscuro text-amarilloLogo px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap">Productos & Stock</button>
+                    <button onclick="cambiarTabAdmin('ia-redes')" id="tab-btn-ia-redes" class="bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap flex items-center gap-1">
+                        <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> Agente IA Redes
+                    </button>
                     <button onclick="cambiarTabAdmin('banners')" id="tab-btn-banners" class="bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap">Banners Carrusel</button>
                     <button onclick="cambiarTabAdmin('categorias')" id="tab-btn-categorias" class="bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap">Categorías</button>
                     <button onclick="cambiarTabAdmin('movimientos')" id="tab-btn-movimientos" class="bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap">Entradas / Salidas</button>
                     <button onclick="cambiarTabAdmin('proveedores')" id="tab-btn-proveedores" class="bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap">Proveedores</button>
                 </div>
                 
+                <!-- SECCIÓN AGENTE DE IA PARA REDES SOCIALES -->
+                <div id="tab-ia-redes" class="hidden space-y-4">
+                    <div class="bg-gradient-to-br from-slate-900 to-verdeOscuro p-4 rounded-xl text-white space-y-3 shadow-lg border border-emerald-500/30">
+                        <div class="flex items-center gap-2 border-b border-emerald-500/30 pb-2">
+                            <i class="fa-solid fa-robot text-amarilloLogo text-xl"></i>
+                            <div>
+                                <h4 class="font-bold text-sm text-amarilloLogo">Asistente de IA para Copywriting</h4>
+                                <p class="text-[11px] text-gray-300">Genera anuncios redactados profesionalmente para publicar en Facebook, Instagram y WhatsApp.</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-slate-800 text-xs">
+                            <div>
+                                <label class="block text-gray-200 font-bold mb-1">Seleccionar Producto en Stock:</label>
+                                <select id="ia-producto-select" onchange="autocompletarIA()" class="w-full border rounded-lg px-3 py-2 bg-white focus:outline-none">
+                                    <option value="">-- Cargar desde inventario --</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-200 font-bold mb-1">Red Social:</label>
+                                <select id="ia-red-social" class="w-full border rounded-lg px-3 py-2 bg-white focus:outline-none">
+                                    <option value="Facebook">Facebook</option>
+                                    <option value="Instagram">Instagram</option>
+                                    <option value="WhatsApp">Estados de WhatsApp</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-200 font-bold mb-1">Objetivo de la publicación:</label>
+                                <select id="ia-objetivo" class="w-full border rounded-lg px-3 py-2 bg-white focus:outline-none">
+                                    <option value="Promoción de Mayoreo">Ventas al Por Mayor</option>
+                                    <option value="Nuevo Producto">Lanzamiento de Producto</option>
+                                    <option value="Oferta Relámpago">Oferta o Descuento Especial</option>
+                                    <option value="Atención al Cliente">Recordatorio de Ubicación / Pedidos</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-200 font-bold mb-1">Tono del Mensaje:</label>
+                                <select id="ia-tono" class="w-full border rounded-lg px-3 py-2 bg-white focus:outline-none">
+                                    <option value="Atractivo y Comercial">Atractivo y Dinámico</option>
+                                    <option value="Profesional y Formal">Profesional para Negocios</option>
+                                    <option value="Cercano y Amigable">Cercano y Familiar</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-200 font-bold mb-1 text-xs">Detalles adicionales para el anuncio:</label>
+                            <input type="text" id="ia-detalles-extra" placeholder="Ej: Precios especiales para pupuserías, entregas rápidas en Santa Ana Norte." class="w-full border rounded-lg px-3 py-2 text-xs text-slate-800 bg-white focus:outline-none">
+                        </div>
+
+                        <button onclick="generarCopyIA()" class="w-full bg-amarilloLogo hover:bg-amarilloHover text-verdeOscuro py-2.5 rounded-lg font-extrabold text-xs transition flex items-center justify-center gap-2 shadow-lg">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Generar Publicación con IA
+                        </button>
+                    </div>
+
+                    <!-- Resultado de la IA -->
+                    <div id="ia-resultado-container" class="hidden bg-white p-4 rounded-xl border border-slate-200 space-y-3">
+                        <div class="flex justify-between items-center border-b pb-2">
+                            <h5 class="font-bold text-slate-700 text-xs flex items-center gap-2">
+                                <i class="fa-solid fa-align-left text-verdeOscuro"></i> Borrador Generado para Redes
+                            </h5>
+                            <button onclick="copiarCopyIA()" class="bg-verdeOscuro text-amarilloLogo px-3 py-1 rounded text-xs font-bold hover:bg-verdeMedio transition flex items-center gap-1 shadow">
+                                <i class="fa-solid fa-copy"></i> Copiar Texto
+                            </button>
+                        </div>
+                        
+                        <textarea id="ia-output-texto" rows="7" class="w-full p-3 border rounded-lg text-xs bg-slate-50 text-slate-800 font-sans focus:outline-none focus:ring-1 focus:ring-verdeOscuro leading-relaxed"></textarea>
+
+                        <div class="flex flex-wrap gap-2 pt-2 border-t">
+                            <a href="https://www.facebook.com" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-[11px] font-bold flex items-center gap-1 transition">
+                                <i class="fa-brands fa-facebook"></i> Abrir Facebook
+                            </a>
+                            <a href="https://web.whatsapp.com" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-[11px] font-bold flex items-center gap-1 transition">
+                                <i class="fa-brands fa-whatsapp"></i> Abrir WhatsApp Web
+                            </a>
+                            <a href="https://www.instagram.com" target="_blank" class="bg-pink-600 hover:bg-pink-700 text-white px-3 py-1.5 rounded-lg text-[11px] font-bold flex items-center gap-1 transition">
+                                <i class="fa-brands fa-instagram"></i> Abrir Instagram
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- SECCIÓN 1: PRODUCTOS Y STOCK -->
                 <div id="tab-productos" class="space-y-4">
                     <div class="bg-slate-50 p-4 rounded-xl border space-y-2">
@@ -314,7 +392,7 @@
         </div>
     </div>
 
-    <!-- Scripts de Firebase y Lógica del Carrusel (Ajustado object-contain para móviles) -->
+    <!-- Scripts de Firebase y Lógica Extendida -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, setDoc, getDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -371,7 +449,6 @@
 
         async function cargarBannersPublicos() {
             const container = document.getElementById('carrusel-slides-container');
-            const dotsContainer = document.getElementById('carrusel-dots');
             if(!container) return;
 
             try {
@@ -379,7 +456,6 @@
                 bannersGlobales = [];
 
                 if (querySnapshot.empty) {
-                    // Banner por defecto con tu nueva imagen
                     bannersGlobales = [
                         { titulo: "¡Celebra y Ahorra en Desechables Básicos!", imagen: "https://iili.io/n52eJNn.jpg", link: "https://wa.me/50368483933" }
                     ];
@@ -494,6 +570,7 @@
 
         function renderizarProductos(lista) {
             const gridPublico = document.getElementById('grid-catalogo-publico');
+            if(!gridPublico) return;
             gridPublico.innerHTML = '';
 
             lista.forEach(p => {
@@ -533,6 +610,71 @@
             await cargarBannersAdmin();
             await cargarProveedoresAdmin();
             await actualizarBotonExpectativaAdmin();
+            poblarSelectIA();
+        }
+
+        function poblarSelectIA() {
+            const selectIA = document.getElementById('ia-producto-select');
+            if(!selectIA) return;
+            selectIA.innerHTML = '<option value="">-- Cargar desde inventario --</option>';
+            productosGlobales.forEach(p => {
+                selectIA.innerHTML += `<option value="${p.id}">${p.nombre} - $${parseFloat(p.precio).toFixed(2)}</option>`;
+            });
+        }
+
+        window.autocompletarIA = function() {
+            const id = document.getElementById('ia-producto-select').value;
+            const campoExtra = document.getElementById('ia-detalles-extra');
+            if(!id) return;
+            const prod = productosGlobales.find(p => p.id === id);
+            if(prod) {
+                campoExtra.value = `Producto: ${prod.nombre}. Precio: $${parseFloat(prod.precio).toFixed(2)}. Categoría: ${prod.categoria || 'Desechables'}.`;
+            }
+        }
+
+        window.generarCopyIA = function() {
+            const red = document.getElementById('ia-red-social').value;
+            const objetivo = document.getElementById('ia-objetivo').value;
+            const tono = document.getElementById('ia-tono').value;
+            const detalles = document.getElementById('ia-detalles-extra').value.trim();
+            const container = document.getElementById('ia-resultado-container');
+            const output = document.getElementById('ia-output-texto');
+
+            let promptBase = "";
+
+            if(red === "WhatsApp") {
+                promptBase = `🟢 ¡ATENCIÓN SANTA ANA! 📦\n\n`;
+                promptBase += `En *Desechables Básicos* tenemos lo que tu negocio necesita:\n`;
+                promptBase += `${detalles ? detalles : "Vasos, bandejas, platos y bolsas de alta calidad al mejor precio."}\n\n`;
+                promptBase += `🚀 Cotiza tu pedido al por mayor o detalle hoy mismo.\n`;
+                promptBase += `📲 Escríbenos directamente dando clic aquí: https://wa.me/50368483933\n\n`;
+                promptBase += `📍 Visítanos: Urb. Santa Ana Norte, Polígono 15 #7.`;
+            } else if(red === "Instagram") {
+                promptBase = `✨ Calidad, variedad y los mejores precios en un solo lugar. ✨\n\n`;
+                promptBase += `Si tienes un restaurante, pupusería o evento en Santa Ana, ¡somos tus aliados estratégicos! 🍽️🥤\n\n`;
+                promptBase += `📌 ${detalles ? detalles : "Mantenemos stock completo de empaques y desechables."}\n\n`;
+                promptBase += `Haz tu pedido por DM o al WhatsApp 📲 6848-3933.\n\n`;
+                promptBase += `#DesechablesBásicos #SantaAnaSV #ElSalvador #PupuseriasSV #Empaques #NegociosSV #SantaAnaNorte`;
+            } else { // Facebook
+                promptBase = `📢 ¡ABASTECE TU NEGOCIO AL MEJOR PRECIO EN SANTA ANA! 📦🎉\n\n`;
+                promptBase += `En **Desechables Básicos** te ofrecemos soluciones completas para tu negocio o evento.\n\n`;
+                promptBase += `👉 ${detalles ? detalles : "Servilletas, vasos foam, bandejas, aluminio y mucho más."}\n\n`;
+                promptBase += `✅ Venta al por mayor y detalle\n`;
+                promptBase += `✅ Excelente atención y precios competitivos\n\n`;
+                promptBase += `📍 Nos encontramos en: Urbanización Santa Ana Norte, Polígono 15 #7.\n`;
+                promptBase += `📲 ¡Haz tu pedido inmediato por WhatsApp aquí!: https://wa.me/50368483933`;
+            }
+
+            output.value = promptBase;
+            container.classList.remove('hidden');
+        }
+
+        window.copiarCopyIA = function() {
+            const copyText = document.getElementById("ia-output-texto");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value);
+            alert("📋 ¡Publicación copiada al portapapeles! Ahora puedes pegarla en tus redes sociales.");
         }
 
         async function cargarBannersAdmin() {
@@ -658,6 +800,7 @@
                 });
                 if(labelInversion) labelInversion.innerText = `Inversión Total: $${inversionTotalGeneral.toFixed(2)}`;
                 renderizarProductos(productosGlobales);
+                poblarSelectIA();
             } catch (e) { console.log(e); }
         }
 
@@ -721,6 +864,7 @@
                 await addDoc(collection(db, "proveedores"), { nombre, fecha: new Date() });
                 alert('✅ Proveedor guardado');
                 document.getElementById('prov-nombre').value = '';
+                cargarProveedoresAdmin();
             } catch(e){}
         }
 
@@ -779,12 +923,16 @@
             } else { alert('Clave incorrecta'); }
         }
         window.cambiarTabAdmin = function(tab) {
-            ['productos', 'banners', 'categorias', 'movimientos', 'proveedores'].forEach(t => {
-                document.getElementById(`tab-${t}`).classList.add('hidden');
-                document.getElementById(`tab-btn-${t}`).className = "bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap";
+            ['productos', 'ia-redes', 'banners', 'categorias', 'movimientos', 'proveedores'].forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                const btn = document.getElementById(`tab-btn-${t}`);
+                if(el) el.classList.add('hidden');
+                if(btn) btn.className = "bg-gray-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap";
             });
-            document.getElementById(`tab-${tab}`).classList.remove('hidden');
-            document.getElementById(`tab-btn-${tab}`).className = "bg-verdeOscuro text-amarilloLogo px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap";
+            const targetEl = document.getElementById(`tab-${tab}`);
+            const targetBtn = document.getElementById(`tab-btn-${tab}`);
+            if(targetEl) targetEl.classList.remove('hidden');
+            if(targetBtn) targetBtn.className = "bg-verdeOscuro text-amarilloLogo px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap flex items-center gap-1";
         }
     </script>
 </body>
